@@ -22,18 +22,6 @@ export default function Footer() {
       { name: "About 74th IPC Pharma Expo", href: "/" },
       { name: "Floor Plan", href: "/floor-plan" },
     ],
-    support: [
-      { name: "Contact Us", href: "/contact" },
-      { name: "Help Center", href: "#" },
-      { name: "Terms & Conditions", href: "#" },
-      { name: "Privacy Policy", href: "#" },
-    ],
-    connect: [
-      { name: "LinkedIn", href: "#", icon: "💼" },
-      { name: "Twitter", href: "#", icon: "🐦" },
-      { name: "Facebook", href: "#", icon: "📘" },
-      { name: "Instagram", href: "#", icon: "📸" },
-    ],
   };
 
   return (
@@ -173,47 +161,11 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-
-            {/* Support Links */}
-            <div>
-              <h4 className="text-lg font-semibold mb-6 text-[var(--primary-orange)]">
-                Support
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.support.map((link, index) => (
-                  <li key={index}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-300 hover:text-white hover:translate-x-2 transition-all duration-200 inline-block"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
 
           {/* Social Media & Partners */}
           <div className="mt-12 pt-8 border-t border-gray-800">
             <div className="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
-              {/* Social Links */}
-              <div className="flex items-center space-x-6">
-                <span className="text-gray-400 font-medium">Follow us:</span>
-                {footerLinks.connect.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.href}
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[var(--primary-orange)] transition-all duration-300 hover:scale-110 group"
-                    aria-label={social.name}
-                  >
-                    <span className="text-lg group-hover:scale-110 transition-transform">
-                      {social.icon}
-                    </span>
-                  </a>
-                ))}
-              </div>
-
               {/* Partners */}
               <div className="text-center lg:text-right">
                 <p className="text-gray-400 mb-2 font-medium">Organized by:</p>

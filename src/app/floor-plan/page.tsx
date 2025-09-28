@@ -11,7 +11,7 @@ export default function FloorPlan() {
   const hallFeatures = [
     {
       icon: "🏢",
-      title: "2 Exhibition Halls",
+      title: "Exhibition Halls",
       description: "Over 50,000 sq. meters of exhibition space",
     },
     {
