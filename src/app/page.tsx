@@ -306,6 +306,167 @@ export default function Home() {
         </div>
       </section>
 
+      {/* About Us Section */}
+      <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+              About{" "}
+              <span className="text-[var(--primary-orange)]">74th IPC</span>
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-[var(--primary-green)] to-[var(--primary-orange)] mx-auto mb-8"></div>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              A premier pharmaceutical event bringing together industry leaders,
+              researchers, and innovators from across the globe.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            {/* Organised By */}
+            <div className="bg-white rounded-xl p-8 shadow-lg hover-lift">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-[var(--primary-green)] to-[var(--primary-orange)] rounded-full flex items-center justify-center">
+                  <span className="text-2xl">🏛️</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    Organised By
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <OptimizedImage
+                  src="/ipca_logo.jpg"
+                  alt="Indian Pharmaceutical Congress Association"
+                  width={200}
+                  height={120}
+                  className="mb-4 rounded-lg"
+                />
+                <h4 className="text-xl font-bold text-gray-800 mb-2">
+                  Indian Pharmaceutical Congress Association
+                </h4>
+                <p className="text-gray-600">
+                  Leading organization dedicated to advancing pharmaceutical
+                  education and research in India.
+                </p>
+              </div>
+            </div>
+
+            {/* Hosted By */}
+            <div className="bg-white rounded-xl p-8 shadow-lg hover-lift">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">🎓</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    Hosted By
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <OptimizedImage
+                  src="/apti_logo.png"
+                  alt="Association of Teachers of India (APTI)"
+                  width={200}
+                  height={120}
+                  className="mb-4 rounded-lg"
+                />
+                <h4 className="text-xl font-bold text-gray-800 mb-2">
+                  Association of Teachers of India (APTI)
+                </h4>
+                <p className="text-gray-600">
+                  Premier academic organization fostering pharmaceutical
+                  education and research excellence.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Powered By */}
+            <div className="bg-white rounded-xl p-8 shadow-lg hover-lift">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">⚡</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    Powered By
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <OptimizedImage
+                  src="/opf_logo.png"
+                  alt="Operant Pharmacy Federation"
+                  width={200}
+                  height={120}
+                  className="mb-4 rounded-lg"
+                />
+                <h4 className="text-xl font-bold text-gray-800 mb-2">
+                  Operant Pharmacy Federation
+                </h4>
+                <p className="text-gray-600">
+                  Empowering pharmaceutical innovation and industry
+                  collaboration.
+                </p>
+              </div>
+            </div>
+
+            {/* Managed By */}
+            <div className="bg-white rounded-xl p-8 shadow-lg hover-lift">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">🔧</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    Managed By
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <OptimizedImage
+                  src="/logo2.jpg"
+                  alt="Operant Scientific Private Limited"
+                  width={200}
+                  height={120}
+                  className="mb-4 rounded-lg"
+                />
+                <h4 className="text-xl font-bold text-gray-800 mb-2">
+                  Operant Scientific Private Limited
+                </h4>
+                <p className="text-gray-600">
+                  Professional event management and scientific solutions
+                  provider.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Legacy Section */}
+          <div className="mt-12 bg-gradient-to-r from-[var(--primary-green)] to-[var(--primary-orange)] rounded-2xl p-8 text-white text-center">
+            <div className="flex items-center justify-center mb-6">
+              <OptimizedImage
+                src="/74ipc expo.png"
+                alt="74th IPC Expo"
+                width={150}
+                height={80}
+                className="rounded-lg"
+              />
+            </div>
+            <h3 className="text-3xl font-bold mb-4">Legacy of Excellence</h3>
+            <p className="text-lg opacity-90 max-w-4xl mx-auto">
+              With 74 years of rich heritage, the Indian Pharmaceutical Congress
+              stands as the most significant pharmaceutical event in India,
+              showcasing cutting-edge innovations, fostering research
+              partnerships, and shaping the future of healthcare.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Promotional Banner */}
       <section className="py-8 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
