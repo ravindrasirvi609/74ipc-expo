@@ -88,12 +88,12 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center gradient-orange-green text-white overflow-hidden">
         {/* Background Image Overlay */}
-        <div className="absolute inset-0 bg-black/20">
+        <div className="absolute inset-0">
           <OptimizedImage
             src="https://blackpepperindia.com/images/portfolio/gallery/industry-pharmaceutical/2025/cphi-china/ipca/large/2-international-pharma-stall-ipca-cphi-china-2025.jpg"
             alt="74th IPC Pharma Exhibition Hall"
             fill
-            className="object-cover opacity-20"
+            className="object-cover opacity-60"
             priority
             sizes="100vw"
           />
