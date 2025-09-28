@@ -15,10 +15,30 @@ export default function Home() {
     subject: "",
     message: "",
   });
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
+
+  const backgroundImages = [
+    "https://images.unsplash.com/photo-1711390811937-1b061eaf28ea?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://images.unsplash.com/photo-1508997449629-303059a039c0?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://images.unsplash.com/photo-1752155509694-acf7b9c8bf51?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "/74ipc expo.png",
+    "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://blackpepperindia.com/images/portfolio/gallery/industry-pharmaceutical/2025/cphi-china/ipca/large/2-international-pharma-stall-ipca-cphi-china-2025.jpg",
+  ];
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBgIndex(
+        (prevIndex) => (prevIndex + 1) % backgroundImages.length
+      );
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
 
   const handleContactInputChange = (
     e: React.ChangeEvent<
@@ -137,21 +157,20 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center gradient-orange-green text-white overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center text-white overflow-hidden bg-gray-900">
         {/* Background Image Overlay */}
-        <div className="absolute inset-0">
-          <OptimizedImage
-            src="https://blackpepperindia.com/images/portfolio/gallery/industry-pharmaceutical/2025/cphi-china/ipca/large/2-international-pharma-stall-ipca-cphi-china-2025.jpg"
-            alt="74th IPC Pharma Exhibition Hall"
-            fill
-            className="object-cover opacity-60"
-            priority
-            sizes="100vw"
-          />
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-1000"
+          style={{
+            backgroundImage: `url('${backgroundImages[currentBgIndex]}')`,
+          }}
+        >
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/30 z-10"></div>
         </div>
 
         {/* Animated Background Elements */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-20">
           <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full floating"></div>
           <div
             className="absolute top-1/4 right-20 w-16 h-16 bg-white/20 rounded-full floating"
@@ -193,7 +212,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div
             className={`transition-all duration-1000 ${
               isVisible
