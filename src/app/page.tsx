@@ -746,7 +746,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4">
-              � What to Expect at IPC 2025
+              � What to Expect at 74th IPC Pharma Expo
             </h2>
             <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto mb-8 rounded-full"></div>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">

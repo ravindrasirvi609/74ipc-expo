@@ -53,7 +53,7 @@ export default function Header() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-[var(--primary-green)] group-hover:text-[var(--primary-orange)] transition-colors">
-                  IPC 2025
+                  74th IPC Pharma Expo
                 </h1>
                 <p className="text-sm text-[var(--primary-orange)] font-medium">
                   Indian Pharmaceutical Congress

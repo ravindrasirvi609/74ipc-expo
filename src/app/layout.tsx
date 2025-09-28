@@ -16,13 +16,13 @@ export const metadata: Metadata = {
   title: {
     default:
       "74th Indian Pharmaceutical Congress 2025 | AI & Technology in Pharma Expo",
-    template: "%s | 74th IPC 2025 - expo.74ipc.com",
+    template: "%s | 74th IPC Pharma Expo - expo.74ipc.com",
   },
   description:
     "Join India's premier pharmaceutical event - 74th Indian Pharmaceutical Congress at BIEC Bengaluru, Dec 19-21, 2025. AI & Technology in Pharma: Educate, Innovate, Empower. 15,000+ attendees, world-class speakers.",
   keywords: [
     "74th Indian Pharmaceutical Congress",
-    "IPC 2025",
+    "74th IPC Pharma Expo",
     "pharmaceutical exhibition",
     "pharma expo Bengaluru",
     "AI in pharmaceutical industry",

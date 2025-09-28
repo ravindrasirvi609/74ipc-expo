@@ -19,7 +19,7 @@ export default function Footer() {
 
   const footerLinks = {
     event: [
-      { name: "About IPC 2025", href: "/" },
+      { name: "About 74th IPC Pharma Expo", href: "/" },
       { name: "Floor Plan", href: "/floor-plan" },
     ],
     support: [
@@ -43,7 +43,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              Stay Updated with IPC 2025
+              Stay Updated with 74th IPC Pharma Expo
             </h3>
             <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
               Get the latest updates on sessions, speakers, and exclusive
@@ -89,7 +89,9 @@ export default function Footer() {
                   />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">IPC 2025</h3>
+                  <h3 className="text-xl font-bold text-white">
+                    74th IPC Pharma Expo
+                  </h3>
                   <p className="text-[var(--primary-orange)] font-medium">
                     Indian Pharmaceutical Congress
                   </p>
@@ -148,7 +150,7 @@ export default function Footer() {
                       d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                     />
                   </svg>
-                  <span>info@74ipc.com</span>
+                  <span>expo@74ipc.com</span>
                 </div>
               </div>
             </div>
@@ -216,7 +218,7 @@ export default function Footer() {
               <div className="text-center lg:text-right">
                 <p className="text-gray-400 mb-2 font-medium">Organized by:</p>
                 <p className="text-white font-semibold">
-                  Association of Pharmaceutical Teachers of India (APTI)
+                  Indian Pharmaceutical Congress Association
                 </p>
               </div>
             </div>

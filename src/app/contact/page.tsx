@@ -58,20 +58,20 @@ export default function Contact() {
   const contactInfo = [
     {
       title: "General Inquiries",
-      email: "info@74ipc.com",
-      phone: "+91 80 1234 5678",
+      email: "expo@74ipc.com",
+      phone: "+91 94609 71652",
       description: "For general questions about the congress",
     },
     {
       title: "Exhibition & Sponsorship",
-      email: "exhibitors@74ipc.com",
-      phone: "+91 80 1234 5680",
+      email: "expo@74ipc.com",
+      phone: "+91 81071 99052",
       description: "Information about booths and sponsorship opportunities",
     },
     {
       title: "Speaker Relations",
-      email: "speakers@74ipc.com",
-      phone: "+91 80 1234 5681",
+      email: "expo@74ipc.com",
+      phone: "+91 94609 71652",
       description: "Speaker applications and coordination",
     },
   ];
@@ -82,16 +82,16 @@ export default function Contact() {
       address:
         "74th Indian Pharmaceutical Congress\nAssociation of Pharmaceutical Teachers of India\nBengaluru Chapter",
       city: "Bengaluru, Karnataka",
-      phone: "+91 80 1234 5678",
-      email: "secretariat@74ipc.com",
+      phone: "+91 94609 71652",
+      email: "expo@74ipc.com",
     },
     {
       name: "APTI Head Office",
       address:
         "Association of Pharmaceutical Teachers of India\nNational Headquarters",
       city: "New Delhi",
-      phone: "+91 11 1234 5678",
-      email: "apti@aptiindia.org",
+      phone: "+91 81071 99052",
+      email: "expo@74ipc.com",
     },
   ];
 
@@ -106,7 +106,7 @@ export default function Contact() {
           </p>
           <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 inline-block">
             <p className="text-lg font-semibold">
-              We&apos;re here to help you make the most of IPC 2025
+              We&apos;re here to help you make the most of 74th IPC Pharma Expo
             </p>
           </div>
         </div>
@@ -450,7 +450,7 @@ export default function Contact() {
                   </div>
                   <div className="text-sm">
                     <div className="font-semibold text-gray-800">LinkedIn</div>
-                    <div className="text-gray-600">IPC 2025</div>
+                    <div className="text-gray-600">74th IPC Pharma Expo</div>
                   </div>
                 </a>
 
@@ -558,8 +558,7 @@ export default function Contact() {
                     />
                   </svg>
                   <div>
-                    <span className="font-semibold">Phone:</span> +91 80 2839
-                    4444
+                    <span className="font-semibold">Phone:</span> +91 94609 71652
                   </div>
                 </div>
 

@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
       await request.json();
 
     const { data, error } = await resend.emails.send({
-      from: "74th IPC Pharma Expo <contact@74ipc.com>",
-      to: ["info@74ipc.com"], // Replace with your email
+      from: "74th IPC Pharma Expo <expo@74ipc.com>",
+      to: ["expo@74ipc.com"], // Replace with your email
       subject: `Contact Form: ${subject}`,
       html: `
         <h2>New Contact Form Submission</h2>
