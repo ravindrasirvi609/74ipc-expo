@@ -89,7 +89,7 @@ export default function Contact() {
       name: "APTI Head Office",
       address:
         "Association of Pharmaceutical Teachers of India\nNational Headquarters",
-      city: "New Delhi",
+      city: "Bengaluru, Karnataka",
       phone: "+91 81071 99052",
       email: "expo@74ipc.com",
     },
@@ -558,7 +558,8 @@ export default function Contact() {
                     />
                   </svg>
                   <div>
-                    <span className="font-semibold">Phone:</span> +91 94609 71652
+                    <span className="font-semibold">Phone:</span> +91 94609
+                    71652
                   </div>
                 </div>
 
