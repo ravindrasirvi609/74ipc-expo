@@ -20,7 +20,6 @@ export default function Footer() {
     event: [
       { name: "About IPC 2025", href: "/" },
       { name: "Floor Plan", href: "/floor-plan" },
-      { name: "Registration", href: "/register" },
     ],
     support: [
       { name: "Contact Us", href: "/contact" },

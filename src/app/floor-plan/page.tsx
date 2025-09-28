@@ -303,14 +303,8 @@ export default function FloorPlan() {
 
                 <div className="mt-6 space-y-3">
                   <Link
-                    href="/register"
-                    className="block w-full bg-[var(--primary-orange)] text-white text-center py-3 rounded-lg font-semibold hover:bg-[var(--accent-orange)] transition-colors"
-                  >
-                    Register as Visitor
-                  </Link>
-                  <Link
                     href="/contact"
-                    className="block w-full border-2 border-[var(--primary-green)] text-[var(--primary-green)] text-center py-3 rounded-lg font-semibold hover:bg-[var(--primary-green)] hover:text-white transition-colors"
+                    className="block w-full bg-[var(--primary-orange)] text-white text-center py-3 rounded-lg font-semibold hover:bg-[var(--accent-orange)] transition-colors"
                   >
                     Contact for Booth Booking
                   </Link>

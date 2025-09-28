@@ -157,12 +157,6 @@ export default function RootLayout({
               },
               url: "https://expo.74ipc.com",
               image: "https://expo.74ipc.com/images/og-image.jpg",
-              offers: {
-                "@type": "Offer",
-                url: "https://expo.74ipc.com/register",
-                price: "5000",
-                priceCurrency: "INR",
-              },
             }),
           }}
         />

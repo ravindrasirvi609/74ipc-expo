@@ -7,10 +7,61 @@ import YouTubeEmbed from "@/components/YouTubeEmbed";
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
+  const [contactFormData, setContactFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    organization: "",
+    subject: "",
+    message: "",
+  });
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  const handleContactInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setContactFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(contactFormData),
+      });
+
+      if (response.ok) {
+        alert(
+          "Thank you for your inquiry! We will get back to you within 24 hours."
+        );
+        setContactFormData({
+          name: "",
+          email: "",
+          phone: "",
+          organization: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        alert("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      alert("Failed to send message. Please try again.");
+    }
+  };
 
   const stats = [
     { number: "15,000+", label: "Pharma Professionals", icon: "👥" },
@@ -206,25 +257,6 @@ export default function Home() {
               style={{ animationDelay: "1s" }}
             >
               <Link
-                href="/register"
-                className="group bg-white text-[var(--primary-green)] px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-2xl hover:shadow-xl flex items-center"
-              >
-                Register Now
-                <svg
-                  className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </Link>
-              <Link
                 href="/contact"
                 className="group border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-[var(--primary-green)] transition-all duration-300 hover:scale-105 flex items-center"
               >
@@ -298,6 +330,152 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4">
+              Get In Touch
+            </h2>
+            <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto mb-8 rounded-full"></div>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Have questions about the 74th IPC Pharma Expo? Contact our team
+              for assistance.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <form onSubmit={handleContactSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    name="name"
+                    required
+                    value={contactFormData.name}
+                    onChange={handleContactInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-orange)] focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="contact-email"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    name="email"
+                    required
+                    value={contactFormData.email}
+                    onChange={handleContactInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-orange)] focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    htmlFor="contact-phone"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="contact-phone"
+                    name="phone"
+                    value={contactFormData.phone}
+                    onChange={handleContactInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-orange)] focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="contact-organization"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Organization
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-organization"
+                    name="organization"
+                    value={contactFormData.organization}
+                    onChange={handleContactInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-orange)] focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="contact-subject"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Subject *
+                </label>
+                <select
+                  id="contact-subject"
+                  name="subject"
+                  required
+                  value={contactFormData.subject}
+                  onChange={handleContactInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-orange)] focus:border-transparent"
+                >
+                  <option value="">Select a subject</option>
+                  <option value="exhibition">Exhibition & Sponsorship</option>
+                  <option value="speaker">Speaker Application</option>
+                  <option value="accommodation">Accommodation</option>
+                  <option value="program">Program Information</option>
+                  <option value="technical">Technical Support</option>
+                  <option value="media">Media & Press</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="contact-message"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Message *
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows={6}
+                  required
+                  value={contactFormData.message}
+                  onChange={handleContactInputChange}
+                  placeholder="Please provide detailed information about your inquiry..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-orange)] focus:border-transparent"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-[var(--primary-orange)] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-[var(--accent-orange)] transition-colors"
+              >
+                Send Message
+              </button>
+            </form>
           </div>
         </div>
       </section>
@@ -379,25 +557,6 @@ export default function Home() {
               Plus: Regulatory Bodies, Policymakers, Investors, Consultants, and
               Universities
             </p>
-            <Link
-              href="/register"
-              className="inline-flex items-center bg-[var(--primary-orange)] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[var(--accent-orange)] transition-all duration-300 hover:scale-105 shadow-lg"
-            >
-              Register Now
-              <svg
-                className="w-5 h-5 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </Link>
           </div>
         </div>
       </section>
@@ -469,27 +628,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <Link
-              href="/register"
-              className="inline-flex items-center bg-[var(--primary-green)] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[var(--dark-green)] transition-all duration-300 hover:scale-105 shadow-lg"
-            >
-              Register Now
-              <svg
-                className="w-5 h-5 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </Link>
-          </div>
+          <div className="text-center mt-12"></div>
         </div>
       </section>
 
@@ -659,14 +798,8 @@ export default function Home() {
                 </p>
                 <div className="space-y-4">
                   <Link
-                    href="/register"
-                    className="block w-full bg-white text-[var(--primary-green)] py-4 px-6 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg"
-                  >
-                    Register as Delegate
-                  </Link>
-                  <Link
                     href="/contact"
-                    className="block w-full border-2 border-white text-white py-4 px-6 rounded-full font-bold text-lg hover:bg-white hover:text-[var(--primary-green)] transition-all duration-300 hover:scale-105"
+                    className="block w-full bg-white text-[var(--primary-green)] py-4 px-6 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg"
                   >
                     Contact Us
                   </Link>
@@ -880,7 +1013,7 @@ export default function Home() {
             </h2>
             <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto rounded-full"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Link
               href="/floor-plan"
               className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
@@ -914,38 +1047,6 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/register"
-              className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
-            >
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:scale-110 transition-transform">
-                📝
-              </div>
-              <h3 className="text-xl font-bold text-[var(--primary-green)] mb-4 group-hover:text-[var(--primary-orange)] transition-colors">
-                Registration
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Register now to join 15,000+ pharmaceutical professionals at
-                India&apos;s premier pharma congress
-              </p>
-              <div className="inline-flex items-center text-[var(--primary-orange)] font-semibold group-hover:translate-x-2 transition-transform">
-                Register Now
-                <svg
-                  className="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </div>
-            </Link>
-
-            <Link
               href="/contact"
               className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
             >
@@ -956,8 +1057,8 @@ export default function Home() {
                 Get in Touch
               </h3>
               <p className="text-gray-600 mb-4">
-                Have questions about registration, exhibition, or partnerships?
-                Our team is ready to help you
+                Have questions about exhibition, or partnerships? Our team is
+                ready to help you
               </p>
               <div className="inline-flex items-center text-[var(--primary-orange)] font-semibold group-hover:translate-x-2 transition-transform">
                 Contact Us

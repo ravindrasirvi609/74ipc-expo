@@ -75,14 +75,7 @@ export default function Header() {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link
-              href="/register"
-              className="bg-gradient-to-r from-[var(--primary-orange)] to-[var(--accent-orange)] text-white px-6 py-3 rounded-full font-semibold hover:from-[var(--accent-orange)] hover:to-[var(--primary-orange)] transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              Register Now
-            </Link>
-          </div>
+          <div className="hidden md:flex items-center space-x-4"></div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -151,13 +144,6 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/register"
-              className="block mx-3 mt-4 bg-gradient-to-r from-[var(--primary-orange)] to-[var(--accent-orange)] text-white px-4 py-3 rounded-full font-semibold text-center hover:from-[var(--accent-orange)] hover:to-[var(--primary-orange)] transition-all duration-200 shadow-lg"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Register Now
-            </Link>
           </div>
         </div>
       </div>

@@ -24,20 +24,35 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Contact form submitted:", formData);
-    alert(
-      "Thank you for your inquiry! We will get back to you within 24 hours."
-    );
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      organization: "",
-      subject: "",
-      message: "",
-    });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert(
+          "Thank you for your inquiry! We will get back to you within 24 hours."
+        );
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          organization: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        alert("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      alert("Failed to send message. Please try again.");
+    }
   };
 
   const contactInfo = [
@@ -46,12 +61,6 @@ export default function Contact() {
       email: "info@74ipc.com",
       phone: "+91 80 1234 5678",
       description: "For general questions about the congress",
-    },
-    {
-      title: "Registration Support",
-      email: "registration@74ipc.com",
-      phone: "+91 80 1234 5679",
-      description: "Help with delegate registration and payment",
     },
     {
       title: "Exhibition & Sponsorship",
@@ -202,7 +211,6 @@ export default function Contact() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-orange)] focus:border-transparent"
                 >
                   <option value="">Select a subject</option>
-                  <option value="registration">Registration Inquiry</option>
                   <option value="exhibition">Exhibition & Sponsorship</option>
                   <option value="speaker">Speaker Application</option>
                   <option value="accommodation">Accommodation</option>
