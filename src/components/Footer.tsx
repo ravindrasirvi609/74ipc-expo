@@ -19,7 +19,6 @@ export default function Footer() {
   const footerLinks = {
     event: [
       { name: "About IPC 2025", href: "/" },
-      { name: "Exhibitors", href: "/exhibitors" },
       { name: "Floor Plan", href: "/floor-plan" },
       { name: "Registration", href: "/register" },
     ],
@@ -47,7 +46,7 @@ export default function Footer() {
               Stay Updated with IPC 2025
             </h3>
             <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-              Get the latest updates on exhibitors, sessions, and exclusive
+              Get the latest updates on sessions, speakers, and exclusive
               announcements
             </p>
             <form
