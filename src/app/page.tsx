@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import OptimizedImage from "@/components/OptimizedImage";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,40 +13,73 @@ export default function Home() {
   }, []);
 
   const stats = [
-    { number: "12,000+", label: "Expected Attendees", icon: "👥" },
-    { number: "500+", label: "Exhibitors", icon: "🏢" },
+    { number: "15,000+", label: "Pharma Professionals", icon: "👥" },
+    { number: "100+", label: "Industry Speakers", icon: "�" },
     { number: "3", label: "Days of Innovation", icon: "📅" },
     { number: "50+", label: "Countries", icon: "🌍" },
   ];
 
-  const features = [
+  const highlights = [
     {
-      title: "AI-Powered Exhibition",
+      title: "Cutting-edge Pharma Machinery",
       description:
-        "Explore cutting-edge AI solutions transforming pharmaceutical research and development",
-      icon: "🤖",
+        "Latest trends in drug discovery, formulation, and manufacturing with advanced process technologies",
+      icon: "⚙️",
       gradient: "from-blue-500 to-purple-600",
     },
     {
-      title: "Technology Showcase",
+      title: "Biotechnology & Diagnostics",
       description:
-        "Discover the latest pharmaceutical technologies and innovations from global leaders",
-      icon: "⚡",
-      gradient: "from-orange-500 to-red-600",
-    },
-    {
-      title: "Networking Hub",
-      description:
-        "Connect with industry professionals, researchers, and decision-makers worldwide",
-      icon: "🤝",
+        "Exhibits on biotechnology innovations, diagnostics solutions, and healthcare technologies",
+      icon: "🧬",
       gradient: "from-green-500 to-blue-500",
     },
     {
-      title: "Interactive Floor Plan",
+      title: "Industry-Academia Collaboration",
       description:
-        "Navigate through our smart exhibition floor with real-time booth availability",
-      icon: "🗺️",
+        "Opportunities for partnerships between universities, research institutes, and industry leaders",
+      icon: "🎓",
+      gradient: "from-orange-500 to-red-600",
+    },
+    {
+      title: "Global Networking Hub",
+      description:
+        "Connect with pharma leaders, researchers, policymakers, and healthcare professionals worldwide",
+      icon: "🤝",
       gradient: "from-purple-500 to-pink-600",
+    },
+  ];
+
+  const attendeeCategories = [
+    {
+      title: "Pharma Industry Professionals",
+      description: "Manufacturers, exporters, distributors, and suppliers",
+      icon: "🏭",
+    },
+    {
+      title: "Pharmaceutical Machinery Providers",
+      description: "Equipment, automation, and packaging innovations",
+      icon: "⚙️",
+    },
+    {
+      title: "Researchers & Scientists",
+      description: "Drug discovery, development, biotechnology experts",
+      icon: "🔬",
+    },
+    {
+      title: "Academicians & Students",
+      description: "Pharmacy, life sciences, biotechnology programs",
+      icon: "🎓",
+    },
+    {
+      title: "Healthcare Professionals",
+      description: "Hospital and clinical pharmacists",
+      icon: "🏥",
+    },
+    {
+      title: "Startups & Innovators",
+      description: "Disruptive pharma and biotech solutions",
+      icon: "💡",
     },
   ];
 
@@ -52,6 +87,18 @@ export default function Home() {
     <div className="min-h-screen overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center gradient-orange-green text-white overflow-hidden">
+        {/* Background Image Overlay */}
+        <div className="absolute inset-0 bg-black/20">
+          <OptimizedImage
+            src="https://blackpepperindia.com/images/portfolio/gallery/industry-pharmaceutical/2025/cphi-china/ipca/large/2-international-pharma-stall-ipca-cphi-china-2025.jpg"
+            alt="74th IPC Pharma Exhibition Hall"
+            fill
+            className="object-cover opacity-20"
+            priority
+            sizes="100vw"
+          />
+        </div>
+
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full floating"></div>
@@ -67,6 +114,32 @@ export default function Home() {
             className="absolute bottom-20 right-1/4 w-24 h-24 bg-white/10 rounded-full floating"
             style={{ animationDelay: "0.5s" }}
           ></div>
+
+          {/* Pharmaceutical Icons */}
+          <div
+            className="absolute top-1/3 left-10 text-4xl opacity-20 floating"
+            style={{ animationDelay: "0.3s" }}
+          >
+            💊
+          </div>
+          <div
+            className="absolute top-2/3 right-10 text-4xl opacity-20 floating"
+            style={{ animationDelay: "1.5s" }}
+          >
+            🧬
+          </div>
+          <div
+            className="absolute bottom-1/3 left-1/3 text-4xl opacity-20 floating"
+            style={{ animationDelay: "2.2s" }}
+          >
+            ⚗️
+          </div>
+          <div
+            className="absolute top-1/2 right-1/4 text-4xl opacity-20 floating"
+            style={{ animationDelay: "0.8s" }}
+          >
+            🔬
+          </div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -102,27 +175,29 @@ export default function Home() {
               </span>
             </h1>
 
-            {/* Theme */}
+            {/* Subtitle */}
             <div
               className="mb-8 animate-slide-up"
               style={{ animationDelay: "0.6s" }}
             >
-              <p className="text-xl md:text-2xl mb-4 font-semibold text-shadow">
-                AI & TECHNOLOGY IN PHARMA:
+              <p className="text-2xl md:text-3xl mb-4 font-bold text-yellow-300 text-shadow">
+                PHARMA EXHIBITION
               </p>
-              <p className="text-2xl md:text-3xl font-bold text-yellow-300 text-shadow">
-                EDUCATE • INNOVATE • EMPOWER
+              <p className="text-xl md:text-2xl font-semibold text-shadow">
+                World-Class Premier Platform
               </p>
             </div>
 
             {/* Description */}
             <p
-              className="text-lg md:text-xl mb-12 max-w-3xl mx-auto opacity-90 text-shadow-light animate-fade-in"
+              className="text-lg md:text-xl mb-12 max-w-4xl mx-auto opacity-90 text-shadow-light animate-fade-in leading-relaxed"
               style={{ animationDelay: "0.8s" }}
             >
-              Join India&apos;s premier pharmaceutical event at Bangalore
-              International Exhibition Centre. Connect with global innovators
-              and explore the future of healthcare technology.
+              Join the world&apos;s most comprehensive pharmaceutical exhibition
+              bringing together global leaders, innovators, and stakeholders.
+              Hosted at BIEC Bengaluru, showcasing cutting-edge innovations,
+              advanced technologies, and future-ready solutions shaping the
+              pharmaceutical industry.
             </p>
 
             {/* CTA Buttons */}
@@ -150,10 +225,10 @@ export default function Home() {
                 </svg>
               </Link>
               <Link
-                href="/exhibitors"
+                href="/contact"
                 className="group border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-[var(--primary-green)] transition-all duration-300 hover:scale-105 flex items-center"
               >
-                View Exhibitors
+                Contact Us
                 <svg
                   className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -164,7 +239,7 @@ export default function Home() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
               </Link>
@@ -176,6 +251,31 @@ export default function Home() {
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Promotional Banner */}
+      <section className="py-8 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative rounded-3xl overflow-hidden">
+            <OptimizedImage
+              src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2301&q=80"
+              alt="BIEC Bengaluru - Bangalore International Exhibition Centre"
+              width={1200}
+              height={300}
+              className="h-48 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary-green)]/90 to-[var(--primary-orange)]/90 flex items-center justify-center">
+              <div className="text-center text-white">
+                <h3 className="text-2xl md:text-3xl font-bold mb-2 text-shadow">
+                  Bangalore International Exhibition Centre
+                </h3>
+                <p className="text-lg opacity-90 text-shadow-light">
+                  World-class venue hosting 15,000+ pharmaceutical professionals
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -202,36 +302,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Key Highlights Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4 animate-fade-in">
-              Why Attend IPC 2025?
+              ✨ Key Highlights
             </h2>
             <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto mb-8 rounded-full animate-scale-in"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-slide-up">
-              Experience the future of pharmaceutical innovation at India&apos;s
-              most comprehensive healthcare technology event
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto animate-slide-up leading-relaxed">
+              The 74th IPC Pharma Expo promises unmatched opportunities for
+              knowledge exchange, networking, partnerships, and business
+              development with pharmaceutical excellence meeting innovation.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {features.map((feature, index) => (
+            {highlights.map((highlight, index) => (
               <div
                 key={index}
                 className="group hover-lift bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:border-[var(--primary-orange)]/30 transition-all duration-300"
               >
                 <div
-                  className={`w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform`}
+                  className={`w-16 h-16 bg-gradient-to-r ${highlight.gradient} rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform`}
                 >
-                  {feature.icon}
+                  {highlight.icon}
                 </div>
                 <h3 className="text-xl font-bold text-[var(--primary-green)] mb-4 group-hover:text-[var(--primary-orange)] transition-colors">
-                  {feature.title}
+                  {highlight.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
+                  {highlight.description}
                 </p>
                 <div className="mt-6">
                   <div className="w-12 h-1 bg-gradient-to-r from-[var(--primary-orange)] to-[var(--primary-green)] rounded-full group-hover:w-20 transition-all duration-300"></div>
@@ -242,15 +343,239 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Event Info Section */}
+      {/* Who Can Attend Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4">
+              👥 Who Can Attend?
+            </h2>
+            <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto mb-8 rounded-full"></div>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              The 74th IPC Pharma Exhibition is open to a wide spectrum of
+              stakeholders across the pharmaceutical and healthcare ecosystem
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {attendeeCategories.map((category, index) => (
+              <div
+                key={index}
+                className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+              >
+                <div className="text-4xl mb-4 text-center">{category.icon}</div>
+                <h3 className="text-lg font-bold text-[var(--primary-green)] mb-3 text-center group-hover:text-[var(--primary-orange)] transition-colors">
+                  {category.title}
+                </h3>
+                <p className="text-gray-600 text-sm text-center leading-relaxed">
+                  {category.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-lg text-gray-700 mb-4">
+              Plus: Regulatory Bodies, Policymakers, Investors, Consultants, and
+              Universities
+            </p>
+            <Link
+              href="/register"
+              className="inline-flex items-center bg-[var(--primary-orange)] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[var(--accent-orange)] transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              Register Now
+              <svg
+                className="w-5 h-5 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* What to Expect Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4">
+              � What to Expect at IPC 2025
+            </h2>
+            <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto mb-8 rounded-full"></div>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Experience the most comprehensive pharmaceutical congress with
+              cutting-edge innovations, world-class speakers, and unparalleled
+              networking opportunities
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Keynote Presentations",
+                description:
+                  "World-renowned pharmaceutical leaders sharing insights",
+                icon: "🎤",
+              },
+              {
+                title: "Interactive Workshops",
+                description: "Hands-on learning sessions and skill development",
+                icon: "🛠️",
+              },
+              {
+                title: "Innovation Showcases",
+                description:
+                  "Latest pharmaceutical technologies and breakthroughs",
+                icon: "💡",
+              },
+              {
+                title: "Networking Sessions",
+                description: "Connect with industry professionals worldwide",
+                icon: "🤝",
+              },
+              {
+                title: "Scientific Posters",
+                description: "Research presentations and academic excellence",
+                icon: "📊",
+              },
+              {
+                title: "Panel Discussions",
+                description: "Expert debates on industry trends and challenges",
+                icon: "💬",
+              },
+            ].map((expectation, index) => (
+              <div
+                key={index}
+                className="group bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100"
+              >
+                <div className="text-4xl mb-4 text-center">
+                  {expectation.icon}
+                </div>
+                <h3 className="text-lg font-bold text-[var(--primary-green)] mb-3 text-center group-hover:text-[var(--primary-orange)] transition-colors">
+                  {expectation.title}
+                </h3>
+                <p className="text-gray-600 text-sm text-center leading-relaxed">
+                  {expectation.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              href="/register"
+              className="inline-flex items-center bg-[var(--primary-green)] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[var(--dark-green)] transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              Register Now
+              <svg
+                className="w-5 h-5 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Exhibit Section */}
       <section className="py-20 gradient-green-orange text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-shadow">
+              🌟 Why Exhibit at the 74th IPC Pharma Exhibition?
+            </h2>
+            <div className="w-24 h-1 bg-white mx-auto mb-8 rounded-full"></div>
+            <p className="text-xl max-w-4xl mx-auto opacity-90 text-shadow-light leading-relaxed">
+              Position your organization at the forefront of pharmaceutical
+              innovation and connect with India&apos;s largest pharma ecosystem
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                icon: "🎯",
+                title: "Access Diverse Audience",
+                desc: "Engage with 15,000+ pharma professionals, researchers, and students",
+              },
+              {
+                icon: "🏆",
+                title: "Brand Recognition",
+                desc: "Enhance visibility with extensive media and digital coverage",
+              },
+              {
+                icon: "🚀",
+                title: "Product Launch Platform",
+                desc: "Introduce innovations to high-impact, target-focused audience",
+              },
+              {
+                icon: "🤝",
+                title: "Industry-Academia Partnerships",
+                desc: "Collaborate with leading universities and research institutes",
+              },
+              {
+                icon: "🏛️",
+                title: "Government Access",
+                desc: "Interact with policymakers and regulatory authorities",
+              },
+              {
+                icon: "💡",
+                title: "Knowledge Exchange",
+                desc: "Stay updated on AI/ML, biotechnology, and digital health trends",
+              },
+              {
+                icon: "⚡",
+                title: "Competitive Edge",
+                desc: "Showcase innovation against leading pharma players",
+              },
+              {
+                icon: "👨‍💼",
+                title: "Talent Recruitment",
+                desc: "Attract young talent from thousands of student visitors",
+              },
+              {
+                icon: "🌍",
+                title: "Global Outreach",
+                desc: "Connect with international delegates and collaborators",
+              },
+            ].map((benefit, index) => (
+              <div
+                key={index}
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300"
+              >
+                <div className="text-3xl mb-4 text-center">{benefit.icon}</div>
+                <h3 className="font-bold text-lg mb-3 text-center">
+                  {benefit.title}
+                </h3>
+                <p className="text-sm opacity-90 text-center leading-relaxed">
+                  {benefit.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="animate-slide-up">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-shadow">
+              <h3 className="text-2xl md:text-3xl font-bold mb-6 text-shadow">
                 Event Information
-              </h2>
+              </h3>
               <div className="space-y-6">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4">
@@ -269,7 +594,7 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">Dates</h3>
+                    <h4 className="font-semibold text-lg">Dates</h4>
                     <p className="opacity-90">December 19-21, 2025</p>
                   </div>
                 </div>
@@ -290,9 +615,10 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">Venue</h3>
+                    <h4 className="font-semibold text-lg">Venue</h4>
                     <p className="opacity-90">
-                      Bangalore International Exhibition Centre (BIEC)
+                      Bangalore International Exhibition Centre (BIEC),
+                      Bengaluru
                     </p>
                   </div>
                 </div>
@@ -313,18 +639,23 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">Timing</h3>
-                    <p className="opacity-90">9:00 AM - 6:00 PM (All days)</p>
+                    <h4 className="font-semibold text-lg">Co-located Expo</h4>
+                    <p className="opacity-90">
+                      Educational Expo connecting universities with industry
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="text-center animate-scale-in">
               <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
-                <h3 className="text-2xl font-bold mb-6">Ready to Join?</h3>
+                <h3 className="text-2xl font-bold mb-6">
+                  Ready to Participate?
+                </h3>
                 <p className="mb-8 opacity-90">
-                  Secure your spot at India&apos;s premier pharmaceutical
-                  congress and be part of the AI revolution in pharma.
+                  Be part of this landmark exhibition where pharmaceutical
+                  excellence meets innovation. Join the largest pharma gathering
+                  in India.
                 </p>
                 <div className="space-y-4">
                   <Link
@@ -334,10 +665,10 @@ export default function Home() {
                     Register as Delegate
                   </Link>
                   <Link
-                    href="/exhibitors"
+                    href="/contact"
                     className="block w-full border-2 border-white text-white py-4 px-6 rounded-full font-bold text-lg hover:bg-white hover:text-[var(--primary-green)] transition-all duration-300 hover:scale-105"
                   >
-                    Become an Exhibitor
+                    Contact Us
                   </Link>
                 </div>
               </div>
@@ -346,8 +677,202 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Video & Gallery Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4">
+              Experience the Exhibition
+            </h2>
+            <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto mb-8 rounded-full"></div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Get a glimpse of what awaits you at the world&apos;s premier
+              pharmaceutical exhibition
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            {/* Video Section */}
+            <div className="relative">
+              <YouTubeEmbed
+                videoId="_JZ573wDQGo"
+                title="74th IPC Pharma Exhibition Overview"
+                description="Experience the world's largest pharmaceutical congress showcasing cutting-edge innovations, global networking, and industry excellence at BIEC Bengaluru"
+                className="h-80 lg:h-96"
+              />
+            </div>
+
+            {/* Image Gallery Preview */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <OptimizedImage
+                  src="https://getaltd.co.uk/uploads/cache/original/public/uploads/media-manager/app-modules-venues-models-venue/halls/439/204857/3.jpg"
+                  alt="Exhibition Hall - 74th IPC"
+                  width={300}
+                  height={200}
+                  className="rounded-2xl h-32 object-cover"
+                />
+                <OptimizedImage
+                  src="https://www.biec.in/enewsletter/june2k17/images/new_hall_2.jpg"
+                  alt="BIEC Venue - Bangalore International Exhibition Centre"
+                  width={300}
+                  height={250}
+                  className="rounded-2xl h-40 object-cover"
+                />
+              </div>
+              <div className="space-y-4">
+                <OptimizedImage
+                  src="https://www.indiawood.com/images/AboutIndiaWood-min.jpg"
+                  alt="Networking Events at IPC"
+                  width={300}
+                  height={250}
+                  className="rounded-2xl h-40 object-cover"
+                />
+                <OptimizedImage
+                  src="https://files.prokerala.com/news/photos/imgs/1024/bengaluru-international-exhibition-centre-biec-1032151.jpg"
+                  alt="Innovation Showcase - Pharmaceutical Technology"
+                  width={300}
+                  height={200}
+                  className="rounded-2xl h-32 object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Visual Gallery Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4">
+              📸 Exhibition Gallery
+            </h2>
+            <div className="w-24 h-1 bg-[var(--primary-orange)] mx-auto mb-8 rounded-full"></div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Experience the scale and innovation of pharmaceutical excellence
+              through our visual showcase
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div className="group">
+              <OptimizedImage
+                src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2331&q=80"
+                alt="Pharmaceutical Research Laboratory"
+                width={400}
+                height={300}
+                className="rounded-2xl h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <h3 className="text-lg font-semibold text-[var(--primary-green)] mt-4 mb-2">
+                Research & Development
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Cutting-edge pharmaceutical research facilities and innovations
+              </p>
+            </div>
+
+            <div className="group">
+              <OptimizedImage
+                src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+                alt="Pharmaceutical Manufacturing Equipment"
+                width={400}
+                height={300}
+                className="rounded-2xl h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <h3 className="text-lg font-semibold text-[var(--primary-green)] mt-4 mb-2">
+                Manufacturing Technology
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Advanced pharmaceutical manufacturing and packaging equipment
+              </p>
+            </div>
+
+            <div className="group">
+              <OptimizedImage
+                src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+                alt="Business Conference and Networking"
+                width={400}
+                height={300}
+                className="rounded-2xl h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <h3 className="text-lg font-semibold text-[var(--primary-green)] mt-4 mb-2">
+                Global Networking
+              </h3>
+              <p className="text-gray-600 text-sm">
+                International pharmaceutical professionals and industry leaders
+              </p>
+            </div>
+
+            <div className="group">
+              <OptimizedImage
+                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+                alt="Pharmaceutical Quality Control"
+                width={400}
+                height={300}
+                className="rounded-2xl h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <h3 className="text-lg font-semibold text-[var(--primary-green)] mt-4 mb-2">
+                Quality Assurance
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Advanced quality control and testing methodologies
+              </p>
+            </div>
+
+            <div className="group">
+              <OptimizedImage
+                src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2331&q=80"
+                alt="Medical Technology Innovation"
+                width={400}
+                height={300}
+                className="rounded-2xl h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <h3 className="text-lg font-semibold text-[var(--primary-green)] mt-4 mb-2">
+                Medical Innovation
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Next-generation medical devices and diagnostic solutions
+              </p>
+            </div>
+
+            <div className="group">
+              <OptimizedImage
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80"
+                alt="Educational and Academic Programs"
+                width={400}
+                height={300}
+                className="rounded-2xl h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <h3 className="text-lg font-semibold text-[var(--primary-green)] mt-4 mb-2">
+                Educational Excellence
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Academic programs and student engagement opportunities
+              </p>
+            </div>
+          </div>
+
+          {/* Video Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <YouTubeEmbed
+              videoId="dQw4w9WgXcQ"
+              title="Pharmaceutical Innovation Summit"
+              description="Discover the latest trends in pharmaceutical technology and innovation"
+              className="h-64"
+            />
+            <YouTubeEmbed
+              videoId="ScMzIvxBSi4"
+              title="Future of Drug Manufacturing"
+              description="Advanced manufacturing processes shaping the pharmaceutical industry"
+              className="h-64"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Quick Links */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-[var(--primary-green)] mb-4">
@@ -358,7 +883,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link
               href="/floor-plan"
-              className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
+              className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
             >
               <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:scale-110 transition-transform">
                 🗺️
@@ -367,8 +892,8 @@ export default function Home() {
                 Interactive Floor Plan
               </h3>
               <p className="text-gray-600 mb-4">
-                Explore our smart exhibition floor with real-time booth
-                information and navigation
+                Navigate through our smart exhibition floor with real-time booth
+                information and exhibitor details
               </p>
               <div className="inline-flex items-center text-[var(--primary-orange)] font-semibold group-hover:translate-x-2 transition-transform">
                 View Floor Plan
@@ -389,21 +914,21 @@ export default function Home() {
             </Link>
 
             <Link
-              href="/exhibitors"
-              className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
+              href="/register"
+              className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
             >
               <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:scale-110 transition-transform">
-                🏢
+                📝
               </div>
               <h3 className="text-xl font-bold text-[var(--primary-green)] mb-4 group-hover:text-[var(--primary-orange)] transition-colors">
-                Exhibitor Directory
+                Registration
               </h3>
               <p className="text-gray-600 mb-4">
-                Discover 500+ exhibitors showcasing the latest pharmaceutical
-                innovations and technologies
+                Register now to join 15,000+ pharmaceutical professionals at
+                India&apos;s premier pharma congress
               </p>
               <div className="inline-flex items-center text-[var(--primary-orange)] font-semibold group-hover:translate-x-2 transition-transform">
-                Browse Exhibitors
+                Register Now
                 <svg
                   className="w-4 h-4 ml-2"
                   fill="none"
@@ -422,7 +947,7 @@ export default function Home() {
 
             <Link
               href="/contact"
-              className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
+              className="group bg-white rounded-2xl p-8 text-center hover-lift shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
             >
               <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 group-hover:scale-110 transition-transform">
                 📞
@@ -431,8 +956,8 @@ export default function Home() {
                 Get in Touch
               </h3>
               <p className="text-gray-600 mb-4">
-                Have questions? Our team is ready to help you make the most of
-                IPC 2025
+                Have questions about registration, exhibition, or partnerships?
+                Our team is ready to help you
               </p>
               <div className="inline-flex items-center text-[var(--primary-orange)] font-semibold group-hover:translate-x-2 transition-transform">
                 Contact Us
