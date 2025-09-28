@@ -166,7 +166,7 @@ export default function Home() {
           }}
         >
           {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/30 z-10"></div>
+          <div className="absolute inset-0 bg-black/70 z-10"></div>
         </div>
 
         {/* Animated Background Elements */}
