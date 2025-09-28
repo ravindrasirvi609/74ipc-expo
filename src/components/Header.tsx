@@ -43,7 +43,7 @@ export default function Header() {
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative w-12 h-12 group-hover:scale-105 transition-transform duration-200">
                 <Image
-                  src="/logo2.jpg"
+                  src="/IPC Edication.png"
                   alt="74th Indian Pharmaceutical Congress Logo"
                   width={48}
                   height={48}
