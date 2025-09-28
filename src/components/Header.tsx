@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,8 +41,15 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3 group">
-              <div className="w-12 h-12 gradient-orange-green rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:scale-105 transition-transform duration-200">
-                74
+              <div className="relative w-12 h-12 group-hover:scale-105 transition-transform duration-200">
+                <Image
+                  src="/logo2.jpg"
+                  alt="74th Indian Pharmaceutical Congress Logo"
+                  width={48}
+                  height={48}
+                  className="rounded-xl shadow-lg object-cover"
+                  priority
+                />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-[var(--primary-green)] group-hover:text-[var(--primary-orange)] transition-colors">

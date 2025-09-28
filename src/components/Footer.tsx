@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -78,8 +79,14 @@ export default function Footer() {
             {/* Event Info */}
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 gradient-orange-green rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                  74
+                <div className="relative w-12 h-12">
+                  <Image
+                    src="/logo2.jpg"
+                    alt="74th Indian Pharmaceutical Congress Logo"
+                    width={48}
+                    height={48}
+                    className="rounded-xl shadow-lg object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">IPC 2025</h3>
