@@ -68,12 +68,6 @@ export default function Contact() {
       phone: "+91 81071 99052",
       description: "Information about booths and sponsorship opportunities",
     },
-    {
-      title: "Speaker Relations",
-      email: "expo@74ipc.com",
-      phone: "+91 94609 71652",
-      description: "Speaker applications and coordination",
-    },
   ];
 
   const officeLocations = [
