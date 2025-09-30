@@ -31,41 +31,6 @@ export default function FloorPlan() {
     },
   ];
 
-  const exhibitionZones = [
-    {
-      zone: "Zone A - Hall 1-3",
-      title: "AI & Technology Pavilion",
-      description:
-        "Latest pharmaceutical AI solutions, digital health platforms, and automation technologies",
-      booths: "A01-A120",
-      color: "from-blue-500 to-purple-600",
-    },
-    {
-      zone: "Zone B - Hall 4-6",
-      title: "Manufacturing & Equipment",
-      description:
-        "Pharmaceutical machinery, manufacturing equipment, and quality control systems",
-      booths: "B01-B150",
-      color: "from-green-500 to-teal-600",
-    },
-    {
-      zone: "Zone C - Hall 7-9",
-      title: "Research & Development",
-      description:
-        "Drug discovery, clinical research, biotechnology, and innovation showcases",
-      booths: "C01-C100",
-      color: "from-orange-500 to-red-600",
-    },
-    {
-      zone: "Zone D - Hall 10-12",
-      title: "Services & Solutions",
-      description:
-        "Regulatory services, logistics, packaging, and pharmaceutical consultancy",
-      booths: "D01-D80",
-      color: "from-purple-500 to-pink-600",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -79,28 +44,6 @@ export default function FloorPlan() {
               Explore the comprehensive layout of the 74th Indian Pharmaceutical
               Congress at BIEC Bengaluru
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button
-                onClick={() => setSelectedView("interactive")}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-200 ${
-                  selectedView === "interactive"
-                    ? "bg-white text-[var(--primary-green)] shadow-lg"
-                    : "bg-white/20 text-white hover:bg-white/30"
-                }`}
-              >
-                Interactive Map
-              </button>
-              <button
-                onClick={() => setSelectedView("info")}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-200 ${
-                  selectedView === "info"
-                    ? "bg-white text-[var(--primary-green)] shadow-lg"
-                    : "bg-white/20 text-white hover:bg-white/30"
-                }`}
-              >
-                Zone Information
-              </button>
-            </div>
           </div>
         </div>
       </section>
@@ -125,7 +68,7 @@ export default function FloorPlan() {
                 <div className="aspect-video w-full">
                   <iframe
                     src="https://boostexpo.com/event/74th-ipc-pharma-expo-bengaluru/floor/preview"
-                    className="w-full h-full border-0"
+                    className="w-full h-full border-0 iframe-no-scroll"
                     title="74th IPC Pharma Expo Floor Plan"
                     allowFullScreen
                     loading="lazy"
@@ -177,57 +120,7 @@ export default function FloorPlan() {
             </div>
           </>
         ) : (
-          <>
-            {/* Zone Information View */}
-            <div className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-[var(--primary-green)] mb-4">
-                  Exhibition Zones
-                </h2>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                  The exhibition is organized into specialized zones, each
-                  focusing on different aspects of the pharmaceutical industry
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {exhibitionZones.map((zone, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-2xl shadow-xl overflow-hidden hover-lift"
-                  >
-                    <div
-                      className={`bg-gradient-to-r ${zone.color} p-6 text-white`}
-                    >
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm font-semibold bg-white/20 px-3 py-1 rounded-full">
-                          {zone.zone}
-                        </span>
-                        <span className="text-sm font-semibold bg-white/20 px-3 py-1 rounded-full">
-                          {zone.booths}
-                        </span>
-                      </div>
-                      <h3 className="text-2xl font-bold mb-3">{zone.title}</h3>
-                      <p className="text-white/90">{zone.description}</p>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-500">
-                          <strong>Location:</strong> {zone.zone}
-                        </div>
-                        <Link
-                          href="/exhibitors"
-                          className="text-[var(--primary-orange)] hover:text-[var(--accent-orange)] font-semibold text-sm"
-                        >
-                          View Exhibitors →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
+          <></>
         )}
 
         {/* Venue Information */}

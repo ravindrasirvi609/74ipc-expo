@@ -401,56 +401,32 @@ export default function Home() {
           </div>
 
           {/* Supporting Organizations */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 group">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <span className="text-lg">⚡</span>
+          <div className="mb-16">
+            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 group">
+              <div className="flex items-center justify-center space-x-6 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-2xl">🔧</span>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-md font-bold text-gray-800">
-                    Powered By
-                  </h3>
-                  <h4 className="text-sm font-semibold text-gray-700">
-                    Operant Pharmacy Federation
-                  </h4>
-                </div>
-                <OptimizedImage
-                  src="/opf_logo.png"
-                  alt="Operant Pharmacy Federation"
-                  width={60}
-                  height={45}
-                  className="rounded-lg shadow-sm"
-                />
-              </div>
-              <p className="text-gray-600 text-xs leading-relaxed">
-                Empowering pharmaceutical innovation and industry collaboration.
-              </p>
-            </div>
-
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 group">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <span className="text-lg">🔧</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-md font-bold text-gray-800">
+                <div className="flex-1 text-center">
+                  <h3 className="text-xl font-bold text-gray-800">
                     Managed By
                   </h3>
-                  <h4 className="text-sm font-semibold text-gray-700">
+                  <h4 className="text-lg font-semibold text-gray-700">
                     Operant Scientific Pvt. Ltd.
                   </h4>
                 </div>
                 <OptimizedImage
                   src="/operant_osl.png"
                   alt="Operant Scientific Private Limited"
-                  width={60}
-                  height={45}
+                  width={80}
+                  height={60}
                   className="rounded-lg shadow-sm"
                 />
               </div>
-              <p className="text-gray-600 text-xs leading-relaxed">
-                Professional event management and scientific solutions provider.
+              <p className="text-gray-600 text-sm text-center leading-relaxed max-w-2xl mx-auto">
+                Professional event management and scientific solutions provider
+                delivering excellence in pharmaceutical congress organization
+                and research support.
               </p>
             </div>
           </div>

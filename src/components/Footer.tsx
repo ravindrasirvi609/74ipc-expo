@@ -161,6 +161,60 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
+
+            {/* Powered By Section */}
+            <div>
+              <h4 className="text-lg font-semibold mb-6 text-[var(--primary-orange)]">
+                Partners
+              </h4>
+              <div className="space-y-4">
+                {/* Powered By */}
+                <div className="bg-gradient-to-br from-gray-800 to-gray-700 rounded-2xl p-5 border border-gray-600 hover:border-[var(--primary-orange)] transition-all duration-300 group">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h5 className="text-sm font-bold text-white mb-1 group-hover:text-[var(--primary-orange)] transition-colors">
+                        Powered By
+                      </h5>
+                      <p className="text-xs font-semibold text-gray-300">
+                        Operant Pharmacy Federation
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0 ml-3">
+                      <Image
+                        src="/opf_logo.png"
+                        alt="Operant Pharmacy Federation"
+                        width={45}
+                        height={34}
+                        className="rounded-lg shadow-sm group-hover:scale-105 transition-transform"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Managed By */}
+                <div className="bg-gradient-to-br from-gray-800 to-gray-700 rounded-2xl p-5 border border-gray-600 hover:border-[var(--primary-green)] transition-all duration-300 group">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h5 className="text-sm font-bold text-white mb-1 group-hover:text-[var(--primary-green)] transition-colors">
+                        Managed By
+                      </h5>
+                      <p className="text-xs font-semibold text-gray-300">
+                        Operant Scientific Pvt. Ltd.
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0 ml-3">
+                      <Image
+                        src="/operant_osl.png"
+                        alt="Operant Scientific Private Limited"
+                        width={45}
+                        height={34}
+                        className="rounded-lg shadow-sm group-hover:scale-105 transition-transform"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Social Media & Partners */}
