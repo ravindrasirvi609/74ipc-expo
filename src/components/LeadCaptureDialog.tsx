@@ -99,7 +99,7 @@ export default function LeadCaptureDialog() {
       <div className="relative z-[105] w-full max-w-3xl space-y-4">
         <LeadRegistrationForm onSuccess={handleSuccess} />
         <p className="text-center text-sm text-gray-100">
-          Prefer the full page? Visit the {" "}
+          Prefer the full page? Visit the{" "}
           <Link
             href="/registration"
             className="font-semibold text-white underline-offset-4 hover:underline"
@@ -114,4 +114,8 @@ export default function LeadCaptureDialog() {
   );
 }
 
-export { hearAboutOptions, interestOptions, stateOptions } from "./LeadRegistrationForm";
+export {
+  hearAboutOptions,
+  interestOptions,
+  stateOptions,
+} from "./LeadRegistrationForm";
