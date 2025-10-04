@@ -4,9 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function FloorPlan() {
-  const [selectedView, setSelectedView] = useState<"interactive" | "info">(
-    "interactive"
-  );
+  const [selectedView] = useState<"interactive" | "info">("interactive");
 
   const hallFeatures = [
     {

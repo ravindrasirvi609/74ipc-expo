@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
     const { data, error } = await resend.emails.send({
       from: "74th IPC Pharma Expo <dev@ravindrachoudhary.in>",
-      to: ["expo@74ipc.com", "dev@ravindrachoudhary.in"], // Replace with your email
+      to: ["expo@74ipc.com", "dev@ravindrachoudhary.in"],
       subject: `EXPO Contact Form: ${subject}`,
       html: `
         <h2>New Contact Form Submission</h2>
@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, data });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

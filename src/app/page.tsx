@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 import OptimizedImage from "@/components/OptimizedImage";
 import YouTubeEmbed from "@/components/YouTubeEmbed";
 
@@ -79,6 +80,7 @@ export default function Home() {
         alert("Failed to send message. Please try again.");
       }
     } catch (error) {
+      console.error(error);
       alert("Failed to send message. Please try again.");
     }
   };
@@ -156,6 +158,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen overflow-hidden">
+      <LeadCaptureDialog />
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center text-white overflow-hidden bg-gray-900">
         {/* Background Image Overlay */}
@@ -272,16 +275,35 @@ export default function Home() {
 
             {/* CTA Buttons */}
             <div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in"
+              className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-scale-in"
               style={{ animationDelay: "1s" }}
             >
               <Link
+                href="/registration"
+                className="group flex items-center rounded-full bg-white px-8 py-4 text-lg font-bold text-[var(--primary-green)] shadow-lg transition-all duration-300 hover:scale-105 hover:bg-[var(--primary-orange)] hover:text-white"
+              >
+                Register Free
+                <svg
+                  className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Link>
+              <Link
                 href="/contact"
-                className="group border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-[var(--primary-green)] transition-all duration-300 hover:scale-105 flex items-center"
+                className="group flex items-center rounded-full border-2 border-white px-8 py-4 text-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-white hover:text-[var(--primary-green)]"
               >
                 Contact Us
                 <svg
-                  className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

@@ -51,6 +51,7 @@ export default function Contact() {
         alert("Failed to send message. Please try again.");
       }
     } catch (error) {
+      console.error(error);
       alert("Failed to send message. Please try again.");
     }
   };

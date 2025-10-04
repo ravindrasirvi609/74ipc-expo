@@ -26,6 +26,7 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: "Home" },
+    { href: "/registration", label: "Register" },
     { href: "/floor-plan", label: "Floor Plan" },
     { href: "/contact", label: "Contact" },
   ];
@@ -83,7 +84,14 @@ export default function Header() {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden md:flex items-center space-x-4"></div>
+          <div className="hidden md:flex items-center space-x-4">
+            <Link
+              href="/registration"
+              className="rounded-full bg-[var(--primary-orange)] px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-orange,#ff854f)] hover:shadow-xl"
+            >
+              Register Free
+            </Link>
+          </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
