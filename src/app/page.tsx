@@ -156,6 +156,21 @@ export default function Home() {
     },
   ];
 
+  const confirmedExhibitors = [
+    {
+      name: "GPAT Discussion Center",
+      logo: "/GDC logo.png",
+    },
+    {
+      name: "Mycal Pharm",
+      logo: "/mycalpharm.jpg",
+    },
+    {
+      name: "Nutrivet Life Sciences",
+      logo: "/NLS_LOGO.jpeg",
+    },
+  ];
+
   return (
     <div className="min-h-screen overflow-hidden">
       <LeadCaptureDialog />
@@ -450,6 +465,52 @@ export default function Home() {
                 delivering excellence in pharmaceutical congress organization
                 and research support.
               </p>
+            </div>
+          </div>
+
+          {/* Confirmed Exhibitors */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center bg-white/60 backdrop-blur-sm rounded-full px-6 py-3 mb-6 border border-white/20">
+                <div className="w-2 h-2 bg-[var(--primary-orange)] rounded-full mr-3 animate-pulse"></div>
+                <span className="text-sm font-semibold text-gray-700 tracking-wide">
+                  CONFIRMED EXHIBITORS
+                </span>
+              </div>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                Trusted Partners Showcasing at the Expo
+              </h3>
+              <div className="w-24 h-1 bg-gradient-to-r from-[var(--primary-green)] to-[var(--primary-orange)] mx-auto rounded-full"></div>
+              <p className="mt-6 text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                We&apos;re thrilled to welcome pioneering organizations who have
+                already confirmed their presence at the 74th IPC Pharma
+                Exhibition.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {confirmedExhibitors.map((exhibitor) => (
+                <div
+                  key={exhibitor.name}
+                  className="group bg-white/70 backdrop-blur-sm rounded-2xl border border-white/30 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                >
+                  <div className="px-6 py-10 flex flex-col items-center text-center">
+                    <div className="w-full max-w-[220px] aspect-square flex items-center justify-center bg-white rounded-xl border border-gray-100 shadow-sm mb-6 p-6">
+                      <OptimizedImage
+                        src={exhibitor.logo}
+                        alt={`${exhibitor.name} logo`}
+                        fill
+                        sizes="(min-width: 1024px) 220px, (min-width: 640px) 180px, 160px"
+                        imgClassName="object-contain"
+                        className="w-full h-full"
+                      />
+                    </div>
+                    <h4 className="text-lg font-semibold text-gray-800">
+                      {exhibitor.name}
+                    </h4>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
