@@ -495,14 +495,13 @@ export default function Home() {
                   className="group bg-white/70 backdrop-blur-sm rounded-2xl border border-white/30 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                 >
                   <div className="px-6 py-10 flex flex-col items-center text-center">
-                    <div className="w-full max-w-[220px] aspect-square flex items-center justify-center bg-white rounded-xl border border-gray-100 shadow-sm mb-6 p-6">
+                    <div className="relative w-full max-w-[220px] min-h-[120px] max-h-[180px] flex items-center justify-center bg-white rounded-xl border border-gray-100 shadow-sm mb-6 p-4">
                       <OptimizedImage
                         src={exhibitor.logo}
                         alt={`${exhibitor.name} logo`}
-                        fill
-                        sizes="(min-width: 1024px) 220px, (min-width: 640px) 180px, 160px"
-                        imgClassName="object-contain"
-                        className="w-full h-full"
+                        width={200}
+                        height={120}
+                        className="object-contain max-w-full max-h-full"
                       />
                     </div>
                     <h4 className="text-lg font-semibold text-gray-800">
