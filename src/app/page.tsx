@@ -163,7 +163,7 @@ export default function Home() {
     },
     {
       name: "Mycal Pharm",
-      logo: "/mycalpharm.jpg",
+      logo: "/MCPL.jpeg",
     },
     {
       name: "Nutrivet Life Sciences",
