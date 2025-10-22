@@ -297,7 +297,7 @@ export default function Home() {
                 href="/registration"
                 className="group flex items-center rounded-full bg-white px-8 py-4 text-lg font-bold text-[var(--primary-green)] shadow-lg transition-all duration-300 hover:scale-105 hover:bg-[var(--primary-orange)] hover:text-white"
               >
-                Register Free
+                Visitor Registration
                 <svg
                   className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
                   fill="none"

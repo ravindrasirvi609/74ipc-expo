@@ -89,7 +89,7 @@ export default function Header() {
               href="/registration"
               className="rounded-full bg-[var(--primary-orange)] px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-orange,#ff854f)] hover:shadow-xl"
             >
-              Register Free
+              Visitor Registration
             </Link>
           </div>
 
