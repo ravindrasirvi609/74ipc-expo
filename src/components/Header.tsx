@@ -26,7 +26,8 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/registration", label: "Register" },
+    { href: "/registration", label: "Visitor" },
+    { href: "/exhibitor", label: "Exhibitor" },
     { href: "/floor-plan", label: "Floor Plan" },
     { href: "/contact", label: "Contact" },
   ];
@@ -86,10 +87,16 @@ export default function Header() {
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
             <Link
+              href="/exhibitor"
+              className="rounded-full border-2 border-[var(--primary-green)] px-5 py-2 text-sm font-semibold text-[var(--primary-green)] transition hover:bg-[var(--primary-green)] hover:text-white"
+            >
+              Become Exhibitor
+            </Link>
+            <Link
               href="/registration"
               className="rounded-full bg-[var(--primary-orange)] px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-orange,#ff854f)] hover:shadow-xl"
             >
-              Visitor Registration
+              Register as Visitor
             </Link>
           </div>
 
@@ -141,7 +148,7 @@ export default function Header() {
         <div
           className={`md:hidden transition-all duration-300 ease-in-out ${
             isMenuOpen
-              ? "max-h-96 opacity-100 pb-4"
+              ? "max-h-[32rem] opacity-100 pb-4"
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
@@ -160,6 +167,22 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
+            <div className="flex flex-col gap-2 pt-2 px-3">
+              <Link
+                href="/exhibitor"
+                className="rounded-full border-2 border-[var(--primary-green)] px-5 py-2 text-center text-sm font-semibold text-[var(--primary-green)] transition hover:bg-[var(--primary-green)] hover:text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Become Exhibitor
+              </Link>
+              <Link
+                href="/registration"
+                className="rounded-full bg-[var(--primary-orange)] px-5 py-2 text-center text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--accent-orange,#ff854f)]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Register as Visitor
+              </Link>
+            </div>
           </div>
         </div>
       </div>
