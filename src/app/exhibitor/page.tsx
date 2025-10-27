@@ -122,7 +122,7 @@ export default function ExhibitorPage() {
             <div className="mt-4 space-y-4">
               <div className="rounded-xl border border-gray-200 bg-slate-50 p-4">
                 <h3 className="font-semibold text-gray-900">
-                  Bare Space - ₹8,000/sqm
+                  Bare Space - ₹14,000/sqm
                 </h3>
                 <p className="mt-1 text-sm text-gray-600">
                   Open space without any construction. Ideal for custom-built
@@ -131,7 +131,7 @@ export default function ExhibitorPage() {
               </div>
               <div className="rounded-xl border border-gray-200 bg-slate-50 p-4">
                 <h3 className="font-semibold text-gray-900">
-                  Shell Scheme - ₹12,000/sqm
+                  Shell Scheme - ₹15,000/sqm
                 </h3>
                 <p className="mt-1 text-sm text-gray-600">
                   Ready-to-use stall with basic infrastructure including walls,
@@ -140,7 +140,7 @@ export default function ExhibitorPage() {
               </div>
               <div className="rounded-xl border border-gray-200 bg-slate-50 p-4">
                 <h3 className="font-semibold text-gray-900">
-                  Custom Built - ₹15,000/sqm
+                  Custom Built - ₹25,000/sqm
                 </h3>
                 <p className="mt-1 text-sm text-gray-600">
                   Fully customized exhibition space designed according to your
