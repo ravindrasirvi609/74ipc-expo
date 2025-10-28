@@ -100,9 +100,9 @@ export const stateOptions = [
 ];
 
 export const stallTypeOptions = [
-  { value: "bare", label: "Bare Space", rate: 8000 },
-  { value: "shell", label: "Shell Scheme", rate: 12000 },
-  { value: "custom", label: "Custom Built", rate: 15000 },
+  { value: "bare", label: "Bare Space", rate: 14000 },
+  { value: "shell", label: "Shell Scheme", rate: 15000 },
+  { value: "custom", label: "Custom Built", rate: 25000 },
 ];
 
 export const stallSizeOptions = [
