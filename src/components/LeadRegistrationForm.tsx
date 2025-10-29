@@ -288,7 +288,7 @@ export default function LeadRegistrationForm({
           <div className="grid grid-cols-2 gap-4 rounded-2xl bg-slate-50/80 p-4 text-sm text-gray-600 sm:grid-cols-4">
             <div>
               <p className="font-semibold text-gray-900">Location</p>
-              <p>Bengaluru Palace Grounds</p>
+              <p>Bangalore International Exhibition Centre, Bangalore</p>
             </div>
             <div>
               <p className="font-semibold text-gray-900">Dates</p>

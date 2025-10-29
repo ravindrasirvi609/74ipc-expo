@@ -30,7 +30,10 @@ const exhibitorCategories = [
 
 const quickFacts = [
   { label: "Event Dates", value: "19-21 December 2025" },
-  { label: "Venue", value: "Bengaluru Palace Grounds" },
+  {
+    label: "Venue",
+    value: "Bangalore International Exhibition Centre, Bangalore",
+  },
   { label: "Expected Visitors", value: "15,000+ professionals" },
   { label: "Exhibition Area", value: "25,000+ sq ft" },
 ];

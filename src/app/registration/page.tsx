@@ -17,7 +17,10 @@ const benefits = [
 
 const quickFacts = [
   { label: "Dates", value: "19-21 December 2025" },
-  { label: "Venue", value: "Bengaluru Palace Grounds" },
+  {
+    label: "Venue",
+    value: "Bangalore International Exhibition Centre, Bangalore",
+  },
   { label: "Entry", value: "Complimentary with registration" },
   { label: "Attendees", value: "15,000+ pharma professionals" },
 ];
