@@ -85,30 +85,30 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const { error } = await resend.emails.send({
-      from: "74th IPC Pharma Expo <dev@ravindrachoudhary.in>",
-      to: ["expo@74ipc.com", "dev@ravindrachoudhary.in"],
-      subject: `New Expo Lead: ${name}`,
-      html: `
-        <h2>New Expo Registration Lead</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Company:</strong> ${company}</p>
-        <p><strong>Job Title:</strong> ${jobTitle}</p>
-        <p><strong>Mobile:</strong> ${phone}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>City:</strong> ${city}</p>
-        <p><strong>State:</strong> ${state}</p>
-        <p><strong>Address:</strong> ${address}</p>
-        <p><strong>Interested In:</strong> ${interest}</p>
-        <p><strong>Referral Source:</strong> ${hearAbout}</p>
-        <p><strong>Submitted At:</strong> ${timestamp}</p>
-      `,
-    });
+    // const { error } = await resend.emails.send({
+    //   from: "74th IPC Pharma Expo <dev@ravindrachoudhary.in>",
+    //   to: ["expo@74ipc.com", "dev@ravindrachoudhary.in"],
+    //   subject: `New Expo Lead: ${name}`,
+    //   html: `
+    //     <h2>New Expo Registration Lead</h2>
+    //     <p><strong>Name:</strong> ${name}</p>
+    //     <p><strong>Company:</strong> ${company}</p>
+    //     <p><strong>Job Title:</strong> ${jobTitle}</p>
+    //     <p><strong>Mobile:</strong> ${phone}</p>
+    //     <p><strong>Email:</strong> ${email}</p>
+    //     <p><strong>City:</strong> ${city}</p>
+    //     <p><strong>State:</strong> ${state}</p>
+    //     <p><strong>Address:</strong> ${address}</p>
+    //     <p><strong>Interested In:</strong> ${interest}</p>
+    //     <p><strong>Referral Source:</strong> ${hearAbout}</p>
+    //     <p><strong>Submitted At:</strong> ${timestamp}</p>
+    //   `,
+    // });
 
-    if (error) {
-      console.error("Resend error", error);
-      return NextResponse.json({ error: error.message }, { status: 502 });
-    }
+    // if (error) {
+    //   console.error("Resend error", error);
+    //   return NextResponse.json({ error: error.message }, { status: 502 });
+    // }
 
     return NextResponse.json({ success: true });
   } catch (error) {
