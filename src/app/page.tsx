@@ -169,6 +169,14 @@ export default function Home() {
       name: "Nutrivet Life Sciences",
       logo: "/NLS_LOGO.jpeg",
     },
+    {
+      name: "RJPT Simlab",
+      logo: "/RJPT-simlab.png",
+    },
+    {
+      name: "IIQA education",
+      logo: "/IIQA.jpeg",
+    },
   ];
 
   return (
