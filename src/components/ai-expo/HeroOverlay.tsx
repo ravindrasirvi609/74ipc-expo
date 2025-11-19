@@ -4,12 +4,13 @@ import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import BigTextScroll from "./BigTextScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SplitText = ({ children, className }: { children: string; className?: string }) => {
     return (
-        <span className={className}>
+        <span className={`${className} inline-block relative`}>
             {children.split("").map((char, index) => (
                 <span key={index} className="inline-block char-reveal">
                     {char === " " ? "\u00A0" : char}
@@ -57,26 +58,26 @@ export default function HeroOverlay() {
 
                 gsap.fromTo(
                     section,
-                    { opacity: 0, y: 100 },
+                    { autoAlpha: 0, y: 100 },
                     {
-                        opacity: 1,
+                        autoAlpha: 1,
                         y: 0,
                         duration: 1,
                         scrollTrigger: {
                             trigger: section,
                             start: "top 85%",
-                            toggleActions: "play none none reverse", // Changed to reverse so it fades out when scrolling up, but re-triggers
+                            toggleActions: "play none none none", // Changed to none so it stays visible
                         },
                     }
                 );
 
-                // Staggered Character Reveal for Headings
-                if (chars.length > 0) {
+                // Staggered Character Reveal for Headings - REMOVED as per user request
+                /* if (chars.length > 0) {
                     gsap.fromTo(
                         chars,
-                        { opacity: 0, y: 20, rotateX: -90 },
+                        { autoAlpha: 0, y: 20, rotateX: -90 },
                         {
-                            opacity: 1,
+                            autoAlpha: 1,
                             y: 0,
                             rotateX: 0,
                             stagger: 0.02,
@@ -85,12 +86,15 @@ export default function HeroOverlay() {
                             scrollTrigger: {
                                 trigger: section,
                                 start: "top 85%",
-                                toggleActions: "play none none reverse",
+                                toggleActions: "play none none none",
                             }
                         }
                     );
-                }
+                } */
             });
+
+            // Force refresh to ensure positions are correct after render
+            ScrollTrigger.refresh();
         }, containerRef);
 
         return () => ctx.revert();
@@ -140,7 +144,7 @@ export default function HeroOverlay() {
                 <section className="content-section flex flex-col md:flex-row items-center gap-16">
                     <div className="flex-1 space-y-6">
                         <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                            <SplitText className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                            <SplitText className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-400 to-blue-600">
                                 AI IN DRUG DISCOVERY
                             </SplitText>
                         </h2>
@@ -167,11 +171,16 @@ export default function HeroOverlay() {
                     </div>
                 </section>
 
+                {/* Big Text Animation 1 */}
+                <div className="-mx-40 opacity-50 mix-blend-screen pointer-events-none">
+                    <BigTextScroll text="FUTURE PHARMACY" direction="left" speed={100} />
+                </div>
+
                 {/* Section 2: Robotics & Automation */}
                 <section className="content-section flex flex-col md:flex-row-reverse items-center gap-16">
                     <div className="flex-1 space-y-6 text-right">
                         <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight flex justify-end">
-                            <SplitText className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+                            <SplitText className="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-400 to-pink-600">
                                 ROBOTICS & AUTOMATION
                             </SplitText>
                         </h2>
@@ -198,11 +207,16 @@ export default function HeroOverlay() {
                     </div>
                 </section>
 
+                {/* Big Text Animation 2 */}
+                <div className="-mx-40 opacity-50 mix-blend-screen pointer-events-none">
+                    <BigTextScroll text="AI REVOLUTION" direction="right" speed={120} />
+                </div>
+
                 {/* Section 3: Patient Care & Diagnostics */}
                 <section className="content-section flex flex-col md:flex-row items-center gap-16">
                     <div className="flex-1 space-y-6">
                         <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                            <SplitText className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">
+                            <SplitText className="text-transparent bg-clip-text bg-gradient-to-r from-white via-green-400 to-emerald-600">
                                 AI IN PATIENT CARE
                             </SplitText>
                         </h2>
