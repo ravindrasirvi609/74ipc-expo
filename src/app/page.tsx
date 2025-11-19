@@ -240,11 +240,10 @@ export default function Home() {
 
         <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div
-            className={`transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
+            className={`transition-all duration-1000 ${isVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-10"
+              }`}
           >
             {/* Event Badge */}
             <div className="inline-flex items-center bg-white/20 backdrop-blur-md rounded-full px-6 py-3 mb-8 border border-white/30">
@@ -339,6 +338,25 @@ export default function Home() {
                   />
                 </svg>
               </Link>
+              {/* <Link
+                href="/accommodation"
+                className="group flex items-center rounded-full border-2 border-white px-8 py-4 text-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-white hover:text-[var(--primary-green)]"
+              >
+                Book Accommodation
+                <svg
+                  className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m8-2a2 2 0 00-2-2H9a2 2 0 00-2 2v2m4-2a2 2 0 002 2v2m-6 0h6"
+                  />
+                </svg>
+              </Link> */}
             </div>
           </div>
         </div>
