@@ -26,40 +26,6 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-900 text-white">
-      {/* Newsletter Section */}
-      <div className="bg-gradient-to-r from-[var(--primary-orange)] to-[var(--primary-green)] py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              Stay Updated with 74th IPC Pharma Expo
-            </h3>
-            <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-              Get the latest updates on sessions, speakers, and exclusive
-              announcements
-            </p>
-            <form
-              onSubmit={handleSubscribe}
-              className="max-w-md mx-auto flex flex-col sm:flex-row gap-4"
-            >
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
-                className="flex-1 px-6 py-4 rounded-full text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-4 focus:ring-white/30 transition-all"
-                required
-              />
-              <button
-                type="submit"
-                className="bg-white text-[var(--primary-green)] px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg"
-              >
-                {isSubscribed ? "✓ Subscribed!" : "Subscribe"}
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-
       {/* Main Footer */}
       <div className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
