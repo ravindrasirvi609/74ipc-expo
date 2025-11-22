@@ -31,9 +31,6 @@ export default function RegistrationPage() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6 lg:flex-row lg:items-start lg:px-8">
         <section className="flex-1 space-y-10">
           <div className="space-y-4">
-            <p className="inline-flex items-center rounded-full bg-[var(--primary-green,#008080)]/10 px-4 py-1 text-sm font-semibold text-[var(--primary-green,#008080)]">
-              🎉 Complimentary Registration
-            </p>
             <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
               Join the 74th IPC Pharma Expo in Bengaluru
             </h1>
