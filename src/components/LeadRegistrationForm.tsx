@@ -271,7 +271,7 @@ export default function LeadRegistrationForm({
         <form className="space-y-8" onSubmit={handleSubmit} noValidate>
           <div className="space-y-3 text-center">
             <p className="mx-auto inline-flex items-center gap-2 rounded-full bg-[var(--primary-green,#008080)]/10 px-5 py-1.5 text-sm font-semibold text-[var(--primary-green,#008080)]">
-              🎟️ Free Expo Registration
+              Expo Registration
               <span className="hidden text-xs font-medium uppercase tracking-widest text-[var(--primary-green,#008080)] sm:inline">
                 2-min completion
               </span>

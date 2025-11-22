@@ -26,7 +26,7 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/ai-expo", label: "AI Expo" },
+    { href: "/ai-expo", label: "AI Pavilion" },
     { href: "/registration", label: "Visitor" },
     { href: "/exhibitor", label: "Exhibitor" },
     { href: "/floor-plan", label: "Floor Plan" },
@@ -35,8 +35,9 @@ export default function Header() {
 
   return (
     <header
-      className={`bg-white/95 backdrop-blur-md shadow-lg border-b-4 border-[var(--primary-orange)] sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "py-2" : "py-4"
-        }`}
+      className={`bg-white/95 backdrop-blur-md shadow-lg border-b-4 border-[var(--primary-orange)] sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled ? "py-2" : "py-4"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
@@ -70,10 +71,11 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative font-medium transition-all duration-200 hover:scale-105 ${isActive(item.href)
+                className={`relative font-medium transition-all duration-200 hover:scale-105 ${
+                  isActive(item.href)
                     ? "text-[var(--primary-orange)]"
                     : "text-gray-700 hover:text-[var(--primary-orange)]"
-                  }`}
+                }`}
               >
                 {item.label}
                 {isActive(item.href) && (
@@ -109,8 +111,9 @@ export default function Header() {
               <span className="sr-only">Open main menu</span>
               <div className="absolute inset-0 flex items-center justify-center">
                 <svg
-                  className={`w-6 h-6 transition-opacity duration-200 ${isMenuOpen ? "opacity-0" : "opacity-100"
-                    }`}
+                  className={`w-6 h-6 transition-opacity duration-200 ${
+                    isMenuOpen ? "opacity-0" : "opacity-100"
+                  }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -123,8 +126,9 @@ export default function Header() {
                   />
                 </svg>
                 <svg
-                  className={`w-6 h-6 absolute transition-opacity duration-200 ${isMenuOpen ? "opacity-100" : "opacity-0"
-                    }`}
+                  className={`w-6 h-6 absolute transition-opacity duration-200 ${
+                    isMenuOpen ? "opacity-100" : "opacity-0"
+                  }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -143,20 +147,22 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen
+          className={`md:hidden transition-all duration-300 ease-in-out ${
+            isMenuOpen
               ? "max-h-[32rem] opacity-100 pb-4"
               : "max-h-0 opacity-0 overflow-hidden"
-            }`}
+          }`}
         >
           <div className="pt-4 space-y-2">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`block px-3 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-gray-50 hover:pl-5 ${isActive(item.href)
+                className={`block px-3 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-gray-50 hover:pl-5 ${
+                  isActive(item.href)
                     ? "text-[var(--primary-orange)] bg-orange-50 border-l-4 border-[var(--primary-orange)]"
                     : "text-gray-700 hover:text-[var(--primary-orange)]"
-                  }`}
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
