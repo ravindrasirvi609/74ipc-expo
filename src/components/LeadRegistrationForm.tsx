@@ -82,10 +82,12 @@ export const hearAboutOptions = [
 
 interface LeadRegistrationFormProps {
   onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
 export default function LeadRegistrationForm({
   onSuccess,
+  onCancel,
 }: LeadRegistrationFormProps = {}) {
   const [formData, setFormData] = useState<LeadFormData>(() => ({
     ...INITIAL_FORM_DATA,
@@ -321,7 +323,7 @@ export default function LeadRegistrationForm({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <label className="space-y-2" htmlFor="name">
                 <span className="text-sm font-semibold text-gray-700">
                   Full name <span className="text-red-500">*</span>
@@ -678,15 +680,26 @@ export default function LeadRegistrationForm({
           )}
 
           <div className="space-y-3">
-            <button
-              type="submit"
-              disabled={status === "submitting"}
-              className="w-full rounded-full bg-[var(--primary-green,#008080)] px-6 py-3.5 text-lg font-semibold text-white shadow-lg transition hover:bg-[var(--primary-green,#006b6b)] disabled:cursor-not-allowed disabled:bg-gray-300"
-            >
-              {status === "submitting"
-                ? "Submitting..."
-                : "Submit registration"}
-            </button>
+            <div className="flex flex-col gap-3 sm:flex-row-reverse">
+              <button
+                type="submit"
+                disabled={status === "submitting"}
+                className="w-full flex-1 rounded-full bg-[var(--primary-green,#008080)] px-6 py-3.5 text-lg font-semibold text-white shadow-lg transition hover:bg-[var(--primary-green,#006b6b)] disabled:cursor-not-allowed disabled:bg-gray-300"
+              >
+                {status === "submitting"
+                  ? "Submitting..."
+                  : "Submit registration"}
+              </button>
+              {onCancel && (
+                <button
+                  type="button"
+                  onClick={onCancel}
+                  className="w-full flex-1 rounded-full border border-gray-200 bg-white px-6 py-3.5 text-lg font-semibold text-gray-600 shadow-sm transition hover:bg-gray-50 hover:text-gray-900"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
             <p className="text-center text-xs text-gray-400">
               We respect your inbox—no spam, just expo essentials and key
               updates.
