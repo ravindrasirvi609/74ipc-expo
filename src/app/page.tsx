@@ -185,6 +185,22 @@ export default function Home() {
       name: "vmedulife Software",
       logo: "/vm.webp",
     },
+    {
+      name: "Nextenti",
+      logo: "/nextenti.png",
+    },
+    {
+      name: "MIT World Peace University",
+      logo: "/mitwpu.jpeg",
+    },
+    {
+      name: "IIHMR UNIVERSITY",
+      logo: "/iihmr.jpeg",
+    },
+    {
+      name: "IPDC",
+      logo: "/ipdc.jpeg",
+    },
   ];
 
   return (
