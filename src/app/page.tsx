@@ -201,6 +201,42 @@ export default function Home() {
       name: "IPDC",
       logo: "/ipdc.jpeg",
     },
+    {
+      name: "Brimingham City University",
+      logo: "/brimingham.jpeg",
+    },
+    {
+      name: "University of Edinburgh",
+      logo: "/edinburgh.jpeg",
+    },
+    {
+      name: "University of Leeds",
+      logo: "/leeds.jpeg",
+    },
+    {
+      name: "Long Island University",
+      logo: "/liu.jpeg",
+    },
+    {
+      name: "Northeastern University",
+      logo: "/northeastern.jpeg",
+    },
+    {
+      name: "Sheffield Hallam University",
+      logo: "/sheffield.jpeg",
+    },
+    {
+      name: "University of Sunderland",
+      logo: "/sunderland.jpeg",
+    },
+    // {
+    //   name: "Novartis",
+    //   logo: "/universityleeds.jpeg",
+    // },
+    {
+      name: "University of Liverpool",
+      logo: "/universityofliverpool.jpeg",
+    },
   ];
 
   return (
@@ -539,7 +575,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
               {confirmedExhibitors.map((exhibitor) => (
                 <div
                   key={exhibitor.name}
