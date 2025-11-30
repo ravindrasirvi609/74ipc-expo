@@ -35,6 +35,7 @@ export const registrationCategoryOptions = [
   "Sponsor",
   "Exhibitor",
   "Guest",
+  "IPCA Member",
 ];
 
 export const countryOptions = [
@@ -429,10 +430,10 @@ export default function RegistrationForm({
           </svg>
         </div>
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Event Registration
+          Complementry Registration for 74th IPC{" "}
         </h2>
         <p className="text-base text-gray-600 sm:text-lg">
-          Join us at the 74th IPC Pharma Expo. Complete your registration below.
+          74th IPC 2025, Bengaluru. Complete your registration below.
         </p>
       </div>
 
