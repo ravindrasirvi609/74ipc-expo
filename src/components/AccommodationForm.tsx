@@ -13,6 +13,8 @@ export interface AccommodationFormData {
   name: string;
   phone: string;
   address: string;
+  category: string;
+  otherCategory: string;
 }
 
 const INITIAL_FORM_DATA: AccommodationFormData = {
@@ -24,6 +26,8 @@ const INITIAL_FORM_DATA: AccommodationFormData = {
   name: "",
   phone: "",
   address: "",
+  category: "",
+  otherCategory: "",
 };
 
 interface AccommodationFormProps {
@@ -80,6 +84,17 @@ export default function AccommodationForm({
     const trimmedAddress = data.address.trim();
     if (trimmedAddress.length < 5) {
       nextErrors.address = "Please enter a valid address.";
+    }
+
+    if (!data.category) {
+      nextErrors.category = "Please select a category.";
+    }
+
+    if (data.category === "Other") {
+      const otherTrim = data.otherCategory?.trim();
+      if (!otherTrim || otherTrim.length < 2) {
+        nextErrors.otherCategory = "Please specify the other category.";
+      }
     }
 
     return nextErrors;
@@ -270,7 +285,7 @@ export default function AccommodationForm({
 
               <label className="space-y-2" htmlFor="checkInDate">
                 <span className="text-sm font-semibold text-gray-700">
-                  Check-in Date <span className="text-red-500">*</span>
+                  Arrival Date <span className="text-red-500">*</span>
                 </span>
                 <input
                   type="date"
@@ -297,7 +312,7 @@ export default function AccommodationForm({
 
               <label className="space-y-2" htmlFor="checkOutDate">
                 <span className="text-sm font-semibold text-gray-700">
-                  Check-out Date <span className="text-red-500">*</span>
+                  Departure Date <span className="text-red-500">*</span>
                 </span>
                 <input
                   type="date"
@@ -324,7 +339,7 @@ export default function AccommodationForm({
 
               <label className="space-y-2" htmlFor="checkInTime">
                 <span className="text-sm font-semibold text-gray-700">
-                  Check-in Time <span className="text-red-500">*</span>
+                  Arrival Time <span className="text-red-500">*</span>
                 </span>
                 <input
                   type="time"
@@ -351,7 +366,7 @@ export default function AccommodationForm({
 
               <label className="space-y-2" htmlFor="checkOutTime">
                 <span className="text-sm font-semibold text-gray-700">
-                  Check-out Time <span className="text-red-500">*</span>
+                  Departure Time <span className="text-red-500">*</span>
                 </span>
                 <input
                   type="time"
@@ -441,6 +456,73 @@ export default function AccommodationForm({
                   </p>
                 )}
               </label>
+
+              <label className="space-y-2 md:col-span-2" htmlFor="category">
+                <span className="text-sm font-semibold text-gray-700">
+                  Category <span className="text-red-500">*</span>
+                </span>
+                <select
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleFormInput}
+                  onBlur={handleBlur}
+                  className={inputClasses("category")}
+                  aria-invalid={fieldHasError("category")}
+                  aria-describedby={
+                    fieldHasError("category") ? "category-error" : undefined
+                  }
+                >
+                  <option value="">Select category</option>
+                  <option value="Speaker">Speaker</option>
+                  <option value="Sponsor">Sponsor</option>
+                  <option value="Exhibitor">Exhibitor</option>
+                  <option value="Guest">Guest</option>
+                  <option value="IPCA Member">IPCA Member</option>
+                  <option value="APTI Awardee">APTI Awardee</option>
+                  <option value="Other">Other</option>
+                </select>
+                {fieldHasError("category") && (
+                  <p id="category-error" className="text-xs text-red-500">
+                    {errors.category}
+                  </p>
+                )}
+              </label>
+
+              {formData.category === "Other" && (
+                <label
+                  className="space-y-2 md:col-span-2"
+                  htmlFor="otherCategory"
+                >
+                  <span className="text-sm font-semibold text-gray-700">
+                    Which other category are you?{" "}
+                    <span className="text-red-500">*</span>
+                  </span>
+                  <input
+                    id="otherCategory"
+                    name="otherCategory"
+                    value={formData.otherCategory}
+                    onChange={handleFormInput}
+                    onBlur={handleBlur}
+                    className={inputClasses("otherCategory")}
+                    placeholder="Please specify"
+                    aria-invalid={fieldHasError("otherCategory")}
+                    aria-describedby={
+                      fieldHasError("otherCategory")
+                        ? "otherCategory-error"
+                        : undefined
+                    }
+                  />
+                  {fieldHasError("otherCategory") && (
+                    <p
+                      id="otherCategory-error"
+                      className="text-xs text-red-500"
+                    >
+                      {errors.otherCategory}
+                    </p>
+                  )}
+                </label>
+              )}
             </div>
 
             <label className="space-y-2 block" htmlFor="address">

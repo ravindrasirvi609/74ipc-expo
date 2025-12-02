@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
 
 const SHEET_RANGE =
-  process.env.GOOGLE_SHEETS_REGISTRATION_RANGE ?? "Registration!A:K";
+  process.env.GOOGLE_SHEETS_REGISTRATION_RANGE ?? "Registration!A:L";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
       address,
       country,
       registrationCategory,
+      otherCategory,
     } = await request.json();
 
     // Validate required fields
@@ -32,6 +33,14 @@ export async function POST(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: "Please provide all required registration details." },
+        { status: 400 }
+      );
+    }
+
+    // Validate otherCategory when Other is selected
+    if (registrationCategory === "Other" && !otherCategory) {
+      return NextResponse.json(
+        { error: "Please specify the other category." },
         { status: 400 }
       );
     }
@@ -98,6 +107,7 @@ export async function POST(request: NextRequest) {
             address,
             country,
             registrationCategory,
+            otherCategory || "",
           ],
         ],
       },

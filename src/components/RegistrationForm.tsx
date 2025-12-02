@@ -14,6 +14,7 @@ export interface RegistrationFormData {
   address: string;
   country: string;
   registrationCategory: string;
+  otherCategory: string;
 }
 
 const INITIAL_FORM_DATA: RegistrationFormData = {
@@ -26,6 +27,7 @@ const INITIAL_FORM_DATA: RegistrationFormData = {
   address: "",
   country: "",
   registrationCategory: "",
+  otherCategory: "",
 };
 
 export const salutationOptions = ["Mr.", "Ms.", "Mrs.", "Dr.", "Prof."];
@@ -36,6 +38,7 @@ export const registrationCategoryOptions = [
   "Exhibitor",
   "Guest",
   "IPCA Member",
+  "Other",
 ];
 
 export const countryOptions = [
@@ -301,6 +304,13 @@ export default function RegistrationForm({
     if (!data.registrationCategory) {
       nextErrors.registrationCategory =
         "Please select a registration category.";
+    }
+
+    if (data.registrationCategory === "Other") {
+      const otherTrim = data.otherCategory?.trim();
+      if (!otherTrim || otherTrim.length < 2) {
+        nextErrors.otherCategory = "Please specify the other category.";
+      }
     }
 
     return nextErrors;
@@ -1046,6 +1056,69 @@ export default function RegistrationForm({
             </p>
           )}
         </div>
+
+        {/* Other Category (conditionally shown) */}
+        {formData.registrationCategory === "Other" && (
+          <div className="group">
+            <label
+              htmlFor="otherCategory"
+              className="mb-2 flex items-center text-sm font-semibold text-gray-700"
+            >
+              <svg
+                className="mr-2 h-4 w-4 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Please specify category{" "}
+              <span className="ml-1 text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="otherCategory"
+              name="otherCategory"
+              value={formData.otherCategory}
+              onChange={handleFormInput}
+              onBlur={handleBlur}
+              disabled={isDisabled}
+              className={inputClasses("otherCategory")}
+              placeholder="Enter your category"
+              aria-invalid={fieldHasError("otherCategory")}
+              aria-describedby={
+                fieldHasError("otherCategory")
+                  ? "otherCategory-error"
+                  : undefined
+              }
+            />
+            {fieldHasError("otherCategory") && (
+              <p
+                id="otherCategory-error"
+                className="mt-2 flex items-center text-sm font-medium text-red-600"
+                role="alert"
+              >
+                <svg
+                  className="mr-1.5 h-4 w-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {errors.otherCategory}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="pt-4">
           <button
