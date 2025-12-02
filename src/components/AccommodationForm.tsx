@@ -12,6 +12,7 @@ export interface AccommodationFormData {
   checkOutTime: string;
   name: string;
   phone: string;
+  email: string;
   address: string;
   category: string;
   otherCategory: string;
@@ -25,6 +26,7 @@ const INITIAL_FORM_DATA: AccommodationFormData = {
   checkOutTime: "",
   name: "",
   phone: "",
+  email: "",
   address: "",
   category: "",
   otherCategory: "",
@@ -79,6 +81,13 @@ export default function AccommodationForm({
     const phoneDigits = data.phone.replace(/\D/g, "");
     if (phoneDigits.length !== 10) {
       nextErrors.phone = "Enter a 10-digit mobile number.";
+    }
+
+    const trimmedEmail = data.email.trim();
+    if (!trimmedEmail) {
+      nextErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      nextErrors.email = "Enter a valid email address.";
     }
 
     const trimmedAddress = data.address.trim();
@@ -453,6 +462,33 @@ export default function AccommodationForm({
                 {fieldHasError("phone") && (
                   <p id="phone-error" className="text-xs text-red-500">
                     {errors.phone}
+                  </p>
+                )}
+              </label>
+
+              <label className="space-y-2" htmlFor="email">
+                <span className="text-sm font-semibold text-gray-700">
+                  Email ID <span className="text-red-500">*</span>
+                </span>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleFormInput}
+                  onBlur={handleBlur}
+                  className={inputClasses("email")}
+                  placeholder="your.email@example.com"
+                  aria-invalid={fieldHasError("email")}
+                  aria-describedby={
+                    fieldHasError("email") ? "email-error" : undefined
+                  }
+                  autoComplete="email"
+                />
+                {fieldHasError("email") && (
+                  <p id="email-error" className="text-xs text-red-500">
+                    {errors.email}
                   </p>
                 )}
               </label>

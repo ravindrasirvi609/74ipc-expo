@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
 const SHEET_RANGE =
   process.env.GOOGLE_SHEETS_REGISTRATION_RANGE ?? "Registration!A:L";
@@ -112,6 +113,39 @@ export async function POST(request: NextRequest) {
         ],
       },
     });
+
+    // Send confirmation email
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    try {
+      await resend.emails.send({
+        from: "74th IPC <dev@ravindrachoudhary.in>",
+        to: email,
+        subject: "Registration Request Received - 74th IPC",
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #008080;">Registration Request Received</h2>
+            <p>Dear ${salutation} ${name},</p>
+            <p>Thank you for registering for the 74th IPC.</p>
+            <p><strong>Your registration details:</strong></p>
+            <ul>
+              <li>Name: ${salutation} ${name}</li>
+              <li>Designation: ${designation}</li>
+              <li>Affiliation: ${affiliation}</li>
+              <li>Category: ${registrationCategory}${
+          otherCategory ? ` (${otherCategory})` : ""
+        }</li>
+              <li>Country: ${country}</li>
+            </ul>
+            <p>Your registration request has been received and we will review it. We will update you on the confirmation status as soon as possible.</p>
+            <p>If you have any questions, please contact us.</p>
+            <p>Best regards,<br>74th IPC Team</p>
+          </div>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Failed to send email:", emailError);
+      // Don't fail the request if email fails
+    }
 
     return NextResponse.json(
       {
