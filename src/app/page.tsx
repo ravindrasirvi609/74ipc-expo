@@ -190,6 +190,10 @@ export default function Home() {
       logo: "/nextenti.png",
     },
     {
+      name: "Manipal University",
+      logo: "/manipal.jpeg",
+    },
+    {
       name: "MIT World Peace University",
       logo: "/mitwpu.jpeg",
     },
@@ -236,7 +240,7 @@ export default function Home() {
     {
       name: "University of Liverpool",
       logo: "/universityofliverpool.jpeg",
-    },
+    }
   ];
 
   return (
@@ -300,11 +304,10 @@ export default function Home() {
 
         <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div
-            className={`transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
+            className={`transition-all duration-1000 ${isVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-10"
+              }`}
           >
             {/* Event Badge */}
             <div className="inline-flex items-center bg-white/20 backdrop-blur-md rounded-full px-6 py-3 mb-8 border border-white/30">
