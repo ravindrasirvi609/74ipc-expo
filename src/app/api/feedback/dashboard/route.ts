@@ -40,25 +40,16 @@ export async function GET() {
                 totalFeedback: 0,
                 averageRatings: [],
                 participationConfig: [],
+                feedbackOverTime: [],
+                recommendationStats: [],
                 recentFeedback: [],
             });
         }
 
-        // Process data
-        // Assuming Row 0 might be headers if exists, or data starts immediately.
-        // However, usually API just appends. If headers were manual, row 0 is headers.
-        // We'll treat all as data if first row looks like a timestamp, otherwise skip 1.
-
-        // Simple heuristic: if first cell of first row is NOT "Timestamp", assume headers.
+        // Skip header if present (heuristic check)
         let dataRows = rows;
         if (rows[0][0] !== undefined && !rows[0][0].includes("T") && !rows[0][0].includes("202")) {
-            // very loose check, but typically headers are "Timestamp", "Email"..
-            // If the user created headers manually, we skip them.
-            // If the automation created the sheet, there might be no headers unless we add them. 
-            // For now, let's assume raw data appended by our previous code has no headers unless added manually.
-            // But wait, user might have added headers. Let's start from index 0. 
-            // Re-reading previous tasks: I just appended data. I did not create headers.
-            // So data starts at row 0. 
+            dataRows = rows.slice(1);
         }
 
         const totalFeedback = dataRows.length;
@@ -74,28 +65,17 @@ export async function GET() {
                     count++;
                 }
             });
-            return count > 0 ? (sum / count).toFixed(1) : "0";
+            return count > 0 ? parseFloat((sum / count).toFixed(1)) : 0;
         };
 
         // Mapping based on route.ts columns:
-        // I (8): Inauguration Grandeur
-        // J (9): Inauguration Timelines
-        // O (14): Transport Communication
-        // T (19): Accommodation Quality
-        // W (22): Scientific Quality
-        // AB (27): Catering Quality
-        // AH (33): Cultural Organization
-        // AT (45): Venue Overall (Text? "Excellent" etc. or Number? Implementation uses RadioField with scaleVenue ["Excellent"...])
-        // Wait, Venue/Hospitality used "Excellent/Good..." scales, not 1-5 numbers in the implementation.
-        // Inauguration/Transport/Scientific/Catering/Cultural used 1-5 RatingField.
-
-        // Let's verify standard number fields:
         const averages = [
-            { name: "Inauguration", value: parseFloat(calculateAverage(8)) },
-            { name: "Transport", value: parseFloat(calculateAverage(15)) }, // Punctuality (15)
-            { name: "Scientific", value: parseFloat(calculateAverage(22)) },
-            { name: "Catering", value: parseFloat(calculateAverage(27)) },
-            { name: "Cultural", value: parseFloat(calculateAverage(34)) }, // Quality (34)
+            { name: "Inauguration", value: calculateAverage(8), fullMark: 5 },
+            { name: "Transport", value: calculateAverage(15), fullMark: 5 },
+            { name: "Scientific", value: calculateAverage(22), fullMark: 5 },
+            { name: "Catering", value: calculateAverage(27), fullMark: 5 },
+            { name: "Cultural", value: calculateAverage(34), fullMark: 5 },
+            { name: "Venue", value: 0, fullMark: 5 }, // Venue/Hospitality need text-to-score mapping if we want to include them
         ];
 
         // Participation Level Distribution (Col G / Index 6)
@@ -110,24 +90,52 @@ export async function GET() {
             value,
         }));
 
+        // Feedback Over Time (Group by Date) - Col A (Index 0)
+        const timeMap: Record<string, number> = {};
+        dataRows.forEach((row) => {
+            const timestamp = row[0];
+            if (timestamp) {
+                try {
+                    const date = new Date(timestamp).toISOString().split('T')[0]; // YYYY-MM-DD
+                    timeMap[date] = (timeMap[date] || 0) + 1;
+                } catch (e) {
+                    // ignore invalid dates
+                }
+            }
+        });
+
+        const feedbackOverTime = Object.entries(timeMap)
+            .map(([date, count]) => ({ date, count }))
+            .sort((a, b) => a.date.localeCompare(b.date));
+
+        // Recommendation Stats - Col BH (Index 59) "Would you recommend..."
+        const recCounts = { Yes: 0, No: 0 };
+        dataRows.forEach((row) => {
+            const ans = (row[59] || "").toLowerCase();
+            if (ans.includes("yes")) recCounts.Yes++;
+            else if (ans.includes("no")) recCounts.No++;
+        });
+
+        const recommendationStats = [
+            { name: "Yes", value: recCounts.Yes },
+            { name: "No", value: recCounts.No },
+        ];
+
         // Recent Feedback (Last 5)
-        // C=Name(2), G=Role(6), BI=Comments(60) -> wait, BI is index 60?
-        // Let's check indices from route.ts
-        // A=0, B=1, ...
-        // BF(57) = Enjoyed
-        // BG(58) = Improve
-        // BH(59) = Recommend
-        // BI(60) = Comments
+        // C=Name(2), G=Role(6), BI=Comments(60) or BF(57) Enjoyed
         const recentFeedback = dataRows.slice(-5).reverse().map((row) => ({
             name: row[2] || "Anonymous",
             role: row[6] || "Participant",
-            comment: row[57] || row[60] || "No comment", // Prefer "Enjoyed" or "Comments"
+            comment: row[57] || row[60] || "No comment",
+            rating: row[8] || "N/A" // Inauguration rating as proxy for satisfaction
         }));
 
         return NextResponse.json({
             totalFeedback,
             averageRatings: averages,
             participationConfig,
+            feedbackOverTime,
+            recommendationStats,
             recentFeedback,
         });
 
