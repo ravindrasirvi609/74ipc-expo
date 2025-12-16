@@ -245,7 +245,7 @@ export default function OverallFeedbackPage() {
         }
     };
 
-    const scale1to5 = ["1", "2", "3", "4", "5"];
+
     const scalePoorExcellent = { "1": "Poor", "5": "Excellent" };
     const scaleUnsatisfiedSatisfied = { "1": "Very Unsatisfied", "5": "Very Satisfied" };
     const scaleIneffectiveEffective = { "1": "Very Ineffective", "5": "Very Effective" };

@@ -1,8 +1,8 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+// import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 const SHEET_RANGE = process.env.GOOGLE_SHEETS_RANGE ?? "Leads!A:K";
 
 export async function POST(request: NextRequest) {

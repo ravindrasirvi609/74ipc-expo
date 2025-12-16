@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import {
-    BarChart,
-    Bar,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -13,8 +11,6 @@ import {
     PieChart,
     Pie,
     Cell,
-    LineChart,
-    Line,
     AreaChart,
     Area,
     RadarChart,
@@ -28,12 +24,10 @@ import {
     Users,
     TrendingUp,
     Star,
-    MessageSquare,
     RefreshCcw,
     Activity,
     Calendar,
     ThumbsUp,
-    ThumbsDown
 } from "lucide-react";
 
 type DashboardData = {
@@ -251,7 +245,7 @@ export default function FeedbackDashboard() {
                                             </span>
                                         </div>
                                         <p className="text-xs text-gray-500 font-medium mb-1">{activity.role}</p>
-                                        <p className="text-sm text-gray-600 line-clamp-2 italic">"{activity.comment}"</p>
+                                        <p className="text-sm text-gray-600 line-clamp-2 italic">&quot;{activity.comment}&quot;</p>
                                     </div>
                                 </div>
                             ))}
@@ -268,7 +262,17 @@ export default function FeedbackDashboard() {
 }
 
 // Stats Card Component
-function KpiCard({ title, value, suffix = "", icon, color, isDecimal = false, trend }: any) {
+interface KpiCardProps {
+    title: string;
+    value: number;
+    suffix?: string;
+    icon: React.ReactNode;
+    color: string;
+    isDecimal?: boolean;
+    trend?: string;
+}
+
+function KpiCard({ title, value, suffix = "", icon, color, isDecimal = false, trend }: KpiCardProps) {
     return (
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start mb-4">

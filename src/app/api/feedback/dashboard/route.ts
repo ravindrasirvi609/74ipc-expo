@@ -98,7 +98,7 @@ export async function GET() {
                 try {
                     const date = new Date(timestamp).toISOString().split('T')[0]; // YYYY-MM-DD
                     timeMap[date] = (timeMap[date] || 0) + 1;
-                } catch (e) {
+                } catch {
                     // ignore invalid dates
                 }
             }

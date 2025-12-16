@@ -1,21 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+
 import Image from "next/image";
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setIsSubscribed(true);
-      setEmail("");
-      setTimeout(() => setIsSubscribed(false), 3000);
-    }
-  };
+
 
   const footerLinks = {
     event: [

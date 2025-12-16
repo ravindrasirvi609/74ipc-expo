@@ -81,7 +81,7 @@ export default function HeroOverlay() {
       // Scroll Triggered Animations for Sections
       const sections = gsap.utils.toArray(".content-section") as HTMLElement[];
       sections.forEach((section) => {
-        const chars = section.querySelectorAll(".char-reveal");
+
 
         gsap.fromTo(
           section,
