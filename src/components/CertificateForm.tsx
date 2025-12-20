@@ -296,7 +296,7 @@ export default function CertificateForm() {
                     {status === "success" && (
                         <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-[var(--primary-green,#008080)] shadow-sm">
                             <p className="font-semibold">Success!</p>
-                            <p>Your certificate delivery request has been submitted. We will process it shortly.</p>
+                            <p>Your courier request has been submitted. We will process it shortly.</p>
                         </div>
                     )}
 
@@ -309,7 +309,7 @@ export default function CertificateForm() {
                             {status === "submitting" ? "Submitting..." : "Request Certificate Delivery"}
                         </button>
                         <p className="text-center text-xs text-gray-500 italic">
-                            Note: Certificates will be delivered to the home address provided above.
+                            Note: Courier will be delivered to the home address provided above.
                         </p>
                     </div>
                 </form>
