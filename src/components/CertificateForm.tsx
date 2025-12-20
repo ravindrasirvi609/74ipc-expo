@@ -4,7 +4,7 @@ import { ChangeEvent, FocusEvent, FormEvent, useState } from "react";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
-interface CertificateFormData {
+interface KitDeliveryFormData {
     name: string;
     email: string;
     phone: string;
@@ -13,7 +13,7 @@ interface CertificateFormData {
     pincode: string;
 }
 
-const INITIAL_FORM_DATA: CertificateFormData = {
+const INITIAL_FORM_DATA: KitDeliveryFormData = {
     name: "",
     email: "",
     phone: "",
@@ -22,21 +22,21 @@ const INITIAL_FORM_DATA: CertificateFormData = {
     pincode: "",
 };
 
-export default function CertificateForm() {
-    const [formData, setFormData] = useState<CertificateFormData>(() => ({
+export default function KitDeliveryForm() {
+    const [formData, setFormData] = useState<KitDeliveryFormData>(() => ({
         ...INITIAL_FORM_DATA,
     }));
     const [status, setStatus] = useState<FormStatus>("idle");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [errors, setErrors] = useState<
-        Partial<Record<keyof CertificateFormData, string>>
+        Partial<Record<keyof KitDeliveryFormData, string>>
     >({});
     const [touched, setTouched] = useState<
-        Partial<Record<keyof CertificateFormData, boolean>>
+        Partial<Record<keyof KitDeliveryFormData, boolean>>
     >({});
 
-    const validateForm = (data: CertificateFormData) => {
-        const nextErrors: Partial<Record<keyof CertificateFormData, string>> = {};
+    const validateForm = (data: KitDeliveryFormData) => {
+        const nextErrors: Partial<Record<keyof KitDeliveryFormData, string>> = {};
 
         if (!data.name.trim() || data.name.trim().length < 2) {
             nextErrors.name = "Please enter your registered full name.";
@@ -69,12 +69,12 @@ export default function CertificateForm() {
         return nextErrors;
     };
 
-    const fieldHasError = (field: keyof CertificateFormData) =>
+    const fieldHasError = (field: keyof KitDeliveryFormData) =>
         Boolean(touched[field] && errors[field]);
 
     const baseInputClasses =
         "w-full rounded-xl border px-4 py-2.5 text-gray-900 shadow-sm transition focus:outline-none focus:ring-2";
-    const inputClasses = (field: keyof CertificateFormData) =>
+    const inputClasses = (field: keyof KitDeliveryFormData) =>
         fieldHasError(field)
             ? `${baseInputClasses} border-red-400 focus:border-red-500 focus:ring-red-100`
             : `${baseInputClasses} border-gray-200 focus:border-[var(--primary-green,#008080)] focus:ring-[var(--primary-green,#008080)]/30`;
@@ -83,7 +83,7 @@ export default function CertificateForm() {
         event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = event.target;
-        const fieldName = name as keyof CertificateFormData;
+        const fieldName = name as keyof KitDeliveryFormData;
         const updated = { ...formData, [fieldName]: value };
 
         if (status === "error") {
@@ -101,7 +101,7 @@ export default function CertificateForm() {
     const handleBlur = (
         event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        const fieldName = event.target.name as keyof CertificateFormData;
+        const fieldName = event.target.name as keyof KitDeliveryFormData;
         setTouched((prev) => ({ ...prev, [fieldName]: true }));
         setErrors(validateForm(formData));
     };
@@ -112,9 +112,9 @@ export default function CertificateForm() {
 
         const validationErrors = validateForm(formData);
         const allTouched = Object.keys(formData).reduce((acc, key) => {
-            acc[key as keyof CertificateFormData] = true;
+            acc[key as keyof KitDeliveryFormData] = true;
             return acc;
-        }, {} as Partial<Record<keyof CertificateFormData, boolean>>);
+        }, {} as Partial<Record<keyof KitDeliveryFormData, boolean>>);
 
         setTouched(allTouched);
         setErrors(validationErrors);
@@ -160,9 +160,9 @@ export default function CertificateForm() {
             <div className="relative z-10 p-8 sm:p-10">
                 <form className="space-y-8" onSubmit={handleSubmit} noValidate>
                     <div className="space-y-3 text-center">
-                        <h2 className="text-3xl font-bold text-gray-900">Courier Request Form</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Kit Delivery Form</h2>
                         <p className="text-gray-600">
-                            Please provide your details below. Note that registration will be couriered to the home address provided.
+                            Please provide your details below. Note that the delegate kit will be couriered to the home address provided.
                         </p>
                     </div>
 
@@ -296,7 +296,7 @@ export default function CertificateForm() {
                     {status === "success" && (
                         <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-[var(--primary-green,#008080)] shadow-sm">
                             <p className="font-semibold">Success!</p>
-                            <p>Your courier request has been submitted. We will process it shortly.</p>
+                            <p>Your kit delivery request has been submitted. We will process it shortly.</p>
                         </div>
                     )}
 
@@ -306,10 +306,10 @@ export default function CertificateForm() {
                             disabled={status === "submitting"}
                             className="w-full rounded-full bg-[var(--primary-green,#008080)] px-6 py-3.5 text-lg font-semibold text-white shadow-lg transition hover:bg-[var(--primary-green,#006b6b)] disabled:cursor-not-allowed disabled:bg-gray-300"
                         >
-                            {status === "submitting" ? "Submitting..." : "Request Certificate Delivery"}
+                            {status === "submitting" ? "Submitting..." : "Request Kit Delivery"}
                         </button>
                         <p className="text-center text-xs text-gray-500 italic">
-                            Note: Courier will be delivered to the home address provided above.
+                            Note: Kit will be delivered to the home address provided above.
                         </p>
                     </div>
                 </form>

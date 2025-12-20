@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       !pincode
     ) {
       return NextResponse.json(
-        { error: "Please provide all required certificate details." },
+        { error: "Please provide all required kit delivery details." },
         { status: 400 }
       );
     }
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Certificate request submitted successfully.",
+        message: "Kit delivery request submitted successfully.",
         data: {
           name,
           email,
@@ -113,13 +113,13 @@ export async function POST(request: NextRequest) {
       const apiError = error as { code: number; message?: string };
       if (apiError.code === 403) {
         return NextResponse.json(
-          { error: "Permission denied to access certificate database." },
+          { error: "Permission denied to access kit delivery database." },
           { status: 500 }
         );
       }
       if (apiError.code === 404) {
         return NextResponse.json(
-          { error: "Certificate database not found." },
+          { error: "Kit delivery database not found." },
           { status: 500 }
         );
       }
