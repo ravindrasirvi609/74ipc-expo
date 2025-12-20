@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import CertificateForm from "@/components/CertificateForm";
 
 export const metadata: Metadata = {
-    title: "Request Certificate Delivery - 74th IPC Pharma Expo",
+    title: "Request Courier - 74th IPC Pharma Expo",
     description:
-        "Request your certificate to be delivered to your home address. Please provide your registration details and delivery address.",
+        "Request your registration to be couriered to your home address. Please provide your registration details and delivery address.",
 };
 
 export default function CertificatesPage() {
@@ -13,10 +13,10 @@ export default function CertificatesPage() {
             <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-12 text-center">
                     <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
-                        Certificate Delivery Request
+                        Courier Request
                     </h1>
                     <p className="mt-4 text-lg text-gray-600">
-                        For attendees of the 74th Indian Pharmaceutical Congress Expo.
+                        For attendees of the 74th Indian Pharmaceutical Congress.
                     </p>
                 </div>
 
@@ -27,7 +27,7 @@ export default function CertificatesPage() {
                         <h3 className="font-semibold mb-2">Important Information</h3>
                         <ul className="list-disc list-inside space-y-1">
                             <li>Please ensure your registration details match our records for faster processing.</li>
-                            <li>Certificates will be delivered via standard courier service.</li>
+                            <li>Registration will be couriered to your home address.</li>
                             <li>Delivery may take 10-15 business days after the event concludes.</li>
                             <li>Make sure to provide a valid pincode and reachable mobile number.</li>
                         </ul>
