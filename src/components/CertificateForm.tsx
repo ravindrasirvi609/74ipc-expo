@@ -160,9 +160,9 @@ export default function CertificateForm() {
             <div className="relative z-10 p-8 sm:p-10">
                 <form className="space-y-8" onSubmit={handleSubmit} noValidate>
                     <div className="space-y-3 text-center">
-                        <h2 className="text-3xl font-bold text-gray-900">Certificate Delivery Form</h2>
+                        <h2 className="text-3xl font-bold text-gray-900">Courier Request Form</h2>
                         <p className="text-gray-600">
-                            Please provide your details below. Note that certificates will be delivered to the home address provided.
+                            Please provide your details below. Note that registration will be couriered to the home address provided.
                         </p>
                     </div>
 
