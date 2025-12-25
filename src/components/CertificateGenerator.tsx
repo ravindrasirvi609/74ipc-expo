@@ -404,31 +404,33 @@ export default function CertificateGenerator() {
             </div>
           </div>
 
-          {/* Right Column - Preview */}
-          <div className="animate-slide-up" style={{ animationDelay: "0.1s" }}>
-            <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl border border-gray-100 sticky top-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <ImageIcon className="w-5 h-5 text-[var(--primary-green)]" />
-                Live Preview - {currentTemplate.title}
-              </h2>
+          {/* Right Column - Preview (only show when valid registration found) */}
+          {lookupStatus === "found" && (
+            <div className="animate-slide-up" style={{ animationDelay: "0.1s" }}>
+              <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl border border-gray-100 sticky top-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <ImageIcon className="w-5 h-5 text-[var(--primary-green)]" />
+                  Live Preview - {currentTemplate.title}
+                </h2>
 
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden shadow-inner">
-                <canvas
-                  ref={canvasRef}
-                  className="w-full h-full object-contain"
-                />
-              </div>
+                <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden shadow-inner">
+                  <canvas
+                    ref={canvasRef}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
 
-              <div className="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
-                <h3 className="font-semibold text-emerald-800 mb-2">Certificate Info</h3>
-                <div className="text-sm text-emerald-700 space-y-1">
-                  <p><span className="font-medium">Type:</span> {currentTemplate.title}</p>
-                  <p><span className="font-medium">Reg. No:</span> {registrationNumber || "(Enter above)"}</p>
-                  <p><span className="font-medium">Name:</span> {participantName.trim() || "(Auto-generated)"}</p>
+                <div className="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                  <h3 className="font-semibold text-emerald-800 mb-2">Certificate Info</h3>
+                  <div className="text-sm text-emerald-700 space-y-1">
+                    <p><span className="font-medium">Type:</span> {currentTemplate.title}</p>
+                    <p><span className="font-medium">Reg. No:</span> {registrationNumber}</p>
+                    <p><span className="font-medium">Name:</span> {participantName.trim()}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
