@@ -194,15 +194,17 @@ export default function Footer() {
                 © 2025 74th Indian Pharmaceutical Congress. All rights reserved.
               </div>
               <div className="flex items-center space-x-6 text-sm">
-                <a
-                  href="https://expo.74ipc.com"
-                  className="text-[var(--primary-orange)] hover:text-white transition-colors"
-                >
-                  expo.74ipc.com
-                </a>
-                <span className="text-gray-600">|</span>
+
                 <span className="text-gray-400">
-                  Made with ❤️ for pharmaceutical innovation
+                  Made with ❤️ by{" "}
+                  <a
+                    href="https://ravindrachoudhary.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--primary-orange)] hover:text-white font-bold transition-colors"
+                  >
+                    Ravindra Choudhary
+                  </a>
                 </span>
               </div>
             </div>
