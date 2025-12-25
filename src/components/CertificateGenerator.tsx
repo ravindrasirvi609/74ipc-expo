@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Upload, Download, Image as ImageIcon, User, Hash, Move, Type, RotateCcw } from "lucide-react";
+import { Download, Image as ImageIcon, User, Move, Type, RotateCcw, Award, FileText } from "lucide-react";
+
+type CertificateType = "delegate" | "poster";
 
 interface TextPosition {
   x: number;
@@ -9,34 +11,51 @@ interface TextPosition {
 }
 
 interface TextConfig {
-  name: TextPosition;
-  regId: TextPosition;
-  fontSize: number;
+  namePosition: TextPosition;
+  textPosition: TextPosition;
+  nameFontSize: number;
+  textFontSize: number;
   fontColor: string;
 }
 
 const DEFAULT_TEXT_CONFIG: TextConfig = {
-  name: { x: 50, y: 45 },
-  regId: { x: 50, y: 55 },
-  fontSize: 32,
+  namePosition: { x: 50, y: 50 },
+  textPosition: { x: 50, y: 58 },
+  nameFontSize: 36,
+  textFontSize: 20,
   fontColor: "#1a1a1a",
 };
 
+const CERTIFICATE_TEMPLATES = {
+  delegate: {
+    templateUrl: "/74th IPC Certificate.png",
+    title: "Delegate Certificate",
+    textBefore: "This is to certify that ",
+    textAfter: " has participated as a Delegate in the 74th IPC held at Bengaluru International Exhibition Center, Bengaluru during December 19-21, 2025",
+  },
+  poster: {
+    templateUrl: "/74th IPC Poster Presentation Certificate.png",
+    title: "Poster Presentation Certificate",
+    textBefore: "This is to certify that ",
+    textAfter: " has successfully delivered a poster presentation in the 74th Indian Pharmaceutical Congress held at Bengaluru International Exhibition Centre, Bengaluru during December 19-21, 2025",
+  },
+};
+
 export default function CertificateGenerator() {
-  const [templateImage, setTemplateImage] = useState<string | null>(null);
-  const [registrationName, setRegistrationName] = useState("");
-  const [registrationId, setRegistrationId] = useState("");
+  const [certificateType, setCertificateType] = useState<CertificateType>("delegate");
+  const [participantName, setParticipantName] = useState("");
   const [textConfig, setTextConfig] = useState<TextConfig>(DEFAULT_TEXT_CONFIG);
-  const [isDragging, setIsDragging] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  
+  const [templateLoaded, setTemplateLoaded] = useState(false);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const currentTemplate = CERTIFICATE_TEMPLATES[certificateType];
 
   // Generate certificate on canvas
   const generateCertificate = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !templateImage) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -51,85 +70,73 @@ export default function CertificateGenerator() {
       // Draw template image
       ctx.drawImage(img, 0, 0);
 
-      // Configure text style
-      ctx.font = `bold ${textConfig.fontSize}px Inter, Arial, sans-serif`;
-      ctx.fillStyle = textConfig.fontColor;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      // Only draw text if participant name is provided
+      if (participantName.trim()) {
+        const centerX = (textConfig.namePosition.x / 100) * canvas.width;
+        const nameY = (textConfig.namePosition.y / 100) * canvas.height;
+        const textY = (textConfig.textPosition.y / 100) * canvas.height;
 
-      // Draw registration name
-      if (registrationName) {
-        const nameX = (textConfig.name.x / 100) * canvas.width;
-        const nameY = (textConfig.name.y / 100) * canvas.height;
-        ctx.fillText(registrationName, nameX, nameY);
+        // Draw participant name (bold, larger)
+        ctx.font = `bold ${textConfig.nameFontSize}px "Times New Roman", Georgia, serif`;
+        ctx.fillStyle = textConfig.fontColor;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(participantName.trim(), centerX, nameY);
+
+        // Draw certificate text (wrapped)
+        const fullText = currentTemplate.textBefore + participantName.trim() + currentTemplate.textAfter;
+        ctx.font = `${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
+
+        // Text wrapping
+        const maxWidth = canvas.width * 0.75;
+        const words = fullText.split(" ");
+        let line = "";
+        let lineY = textY;
+        const lineHeight = textConfig.textFontSize * 1.5;
+
+        for (let i = 0; i < words.length; i++) {
+          const testLine = line + words[i] + " ";
+          const metrics = ctx.measureText(testLine);
+
+          if (metrics.width > maxWidth && i > 0) {
+            ctx.fillText(line.trim(), centerX, lineY);
+            line = words[i] + " ";
+            lineY += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line.trim(), centerX, lineY);
       }
 
-      // Draw registration ID
-      if (registrationId) {
-        const idX = (textConfig.regId.x / 100) * canvas.width;
-        const idY = (textConfig.regId.y / 100) * canvas.height;
-        ctx.font = `${textConfig.fontSize * 0.7}px Inter, Arial, sans-serif`;
-        ctx.fillText(`Registration ID: ${registrationId}`, idX, idY);
-      }
+      setTemplateLoaded(true);
     };
-    img.src = templateImage;
-  }, [templateImage, registrationName, registrationId, textConfig]);
+    img.onerror = () => {
+      console.error("Failed to load template image");
+      setTemplateLoaded(false);
+    };
+    img.src = currentTemplate.templateUrl;
+  }, [certificateType, participantName, textConfig, currentTemplate]);
 
   // Update canvas whenever inputs change
   useEffect(() => {
     generateCertificate();
   }, [generateCertificate]);
 
-  // Handle file upload
-  const handleFileUpload = (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      alert("Please upload an image file");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setTemplateImage(e.target?.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  // Drag and drop handlers
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFileUpload(file);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFileUpload(file);
-  };
-
   // Download certificate
   const downloadCertificate = async () => {
     const canvas = canvasRef.current;
-    if (!canvas || !templateImage) return;
+    if (!canvas || !participantName.trim()) return;
 
     setIsGenerating(true);
-    
+
     // Wait for canvas to be ready
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     try {
       const link = document.createElement("a");
-      link.download = `certificate-${registrationId || "generated"}.png`;
+      const safeName = participantName.trim().replace(/[^a-zA-Z0-9]/g, "_");
+      link.download = `certificate-${certificateType}-${safeName}.png`;
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
     } catch (error) {
@@ -142,11 +149,8 @@ export default function CertificateGenerator() {
 
   // Reset all
   const resetAll = () => {
-    setTemplateImage(null);
-    setRegistrationName("");
-    setRegistrationId("");
+    setParticipantName("");
     setTextConfig(DEFAULT_TEXT_CONFIG);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const baseInputClasses =
@@ -161,98 +165,85 @@ export default function CertificateGenerator() {
             Certificate Generator
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Upload your certificate template, enter registration details, and download your personalized certificate instantly.
+            Generate personalized certificates for 74th IPC participants. Select certificate type, enter the name, and download instantly.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Left Column - Controls */}
           <div className="space-y-6 animate-slide-up">
-            {/* Upload Section */}
+            {/* Certificate Type Selection */}
             <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl border border-gray-100">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <ImageIcon className="w-5 h-5 text-[var(--primary-green)]" />
-                Upload Certificate Template
+                <Award className="w-5 h-5 text-[var(--primary-green)]" />
+                Select Certificate Type
               </h2>
-              
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
-                  isDragging
-                    ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 scale-[1.02]"
-                    : templateImage
-                    ? "border-emerald-300 bg-emerald-50"
-                    : "border-gray-300 hover:border-[var(--primary-green)] hover:bg-gray-50"
-                }`}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleInputChange}
-                  className="hidden"
-                />
-                
-                {templateImage ? (
-                  <div className="space-y-3">
-                    <div className="w-16 h-16 mx-auto bg-emerald-100 rounded-full flex items-center justify-center">
-                      <ImageIcon className="w-8 h-8 text-emerald-600" />
-                    </div>
-                    <p className="text-emerald-700 font-medium">Template uploaded!</p>
-                    <p className="text-sm text-gray-500">Click or drag to replace</p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-200 transition">
-                      <Upload className="w-8 h-8 text-gray-400" />
-                    </div>
-                    <p className="text-gray-700 font-medium">Drop your certificate template here</p>
-                    <p className="text-sm text-gray-500">or click to browse</p>
-                    <p className="text-xs text-gray-400">Supports PNG, JPG, JPEG</p>
-                  </div>
-                )}
+
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => setCertificateType("delegate")}
+                  className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${certificateType === "delegate"
+                      ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
+                      : "border-gray-200 hover:border-gray-300"
+                    }`}
+                >
+                  <FileText className={`w-8 h-8 ${certificateType === "delegate" ? "text-[var(--primary-green)]" : "text-gray-400"}`} />
+                  <span className={`font-semibold ${certificateType === "delegate" ? "text-[var(--primary-green)]" : "text-gray-600"}`}>
+                    Delegate
+                  </span>
+                  <span className="text-xs text-gray-500 text-center">Participation Certificate</span>
+                </button>
+
+                <button
+                  onClick={() => setCertificateType("poster")}
+                  className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${certificateType === "poster"
+                      ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
+                      : "border-gray-200 hover:border-gray-300"
+                    }`}
+                >
+                  <ImageIcon className={`w-8 h-8 ${certificateType === "poster" ? "text-[var(--primary-green)]" : "text-gray-400"}`} />
+                  <span className={`font-semibold ${certificateType === "poster" ? "text-[var(--primary-green)]" : "text-gray-600"}`}>
+                    Poster
+                  </span>
+                  <span className="text-xs text-gray-500 text-center">Presentation Certificate</span>
+                </button>
               </div>
             </div>
 
-            {/* Registration Details */}
+            {/* Participant Name */}
             <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl border border-gray-100">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <User className="w-5 h-5 text-[var(--primary-green)]" />
-                Registration Details
+                Participant Details
               </h2>
-              
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    Registration Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={registrationName}
-                    onChange={(e) => setRegistrationName(e.target.value)}
-                    className={baseInputClasses}
-                    placeholder="Enter participant name"
-                  />
-                </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <Hash className="w-4 h-4" />
-                    Registration ID <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={registrationId}
-                    onChange={(e) => setRegistrationId(e.target.value)}
-                    className={baseInputClasses}
-                    placeholder="e.g., REG-2024-001"
-                  />
-                </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  Participant Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={participantName}
+                  onChange={(e) => setParticipantName(e.target.value)}
+                  className={baseInputClasses}
+                  placeholder="Enter participant's full name"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  This name will appear on the certificate
+                </p>
               </div>
+
+              {/* Preview of certificate text */}
+              {participantName.trim() && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <p className="text-sm text-gray-700 italic">
+                    {currentTemplate.textBefore}
+                    <span className="font-bold text-[var(--primary-green)]">{participantName.trim()}</span>
+                    {currentTemplate.textAfter}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Text Positioning */}
@@ -261,39 +252,39 @@ export default function CertificateGenerator() {
                 <Move className="w-5 h-5 text-[var(--primary-green)]" />
                 Text Positioning
               </h2>
-              
+
               <div className="space-y-6">
                 {/* Name Position */}
                 <div className="space-y-3">
                   <p className="text-sm font-semibold text-gray-700">Name Position</p>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Horizontal (X): {textConfig.name.x}%</label>
+                      <label className="text-xs text-gray-500 mb-1 block">Horizontal: {textConfig.namePosition.x}%</label>
                       <input
                         type="range"
                         min="0"
                         max="100"
-                        value={textConfig.name.x}
+                        value={textConfig.namePosition.x}
                         onChange={(e) =>
                           setTextConfig((prev) => ({
                             ...prev,
-                            name: { ...prev.name, x: Number(e.target.value) },
+                            namePosition: { ...prev.namePosition, x: Number(e.target.value) },
                           }))
                         }
                         className="w-full accent-[var(--primary-green)]"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Vertical (Y): {textConfig.name.y}%</label>
+                      <label className="text-xs text-gray-500 mb-1 block">Vertical: {textConfig.namePosition.y}%</label>
                       <input
                         type="range"
                         min="0"
                         max="100"
-                        value={textConfig.name.y}
+                        value={textConfig.namePosition.y}
                         onChange={(e) =>
                           setTextConfig((prev) => ({
                             ...prev,
-                            name: { ...prev.name, y: Number(e.target.value) },
+                            namePosition: { ...prev.namePosition, y: Number(e.target.value) },
                           }))
                         }
                         className="w-full accent-[var(--primary-green)]"
@@ -302,37 +293,37 @@ export default function CertificateGenerator() {
                   </div>
                 </div>
 
-                {/* Registration ID Position */}
+                {/* Text Position */}
                 <div className="space-y-3">
-                  <p className="text-sm font-semibold text-gray-700">Registration ID Position</p>
+                  <p className="text-sm font-semibold text-gray-700">Certificate Text Position</p>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Horizontal (X): {textConfig.regId.x}%</label>
+                      <label className="text-xs text-gray-500 mb-1 block">Horizontal: {textConfig.textPosition.x}%</label>
                       <input
                         type="range"
                         min="0"
                         max="100"
-                        value={textConfig.regId.x}
+                        value={textConfig.textPosition.x}
                         onChange={(e) =>
                           setTextConfig((prev) => ({
                             ...prev,
-                            regId: { ...prev.regId, x: Number(e.target.value) },
+                            textPosition: { ...prev.textPosition, x: Number(e.target.value) },
                           }))
                         }
                         className="w-full accent-[var(--primary-green)]"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Vertical (Y): {textConfig.regId.y}%</label>
+                      <label className="text-xs text-gray-500 mb-1 block">Vertical: {textConfig.textPosition.y}%</label>
                       <input
                         type="range"
                         min="0"
                         max="100"
-                        value={textConfig.regId.y}
+                        value={textConfig.textPosition.y}
                         onChange={(e) =>
                           setTextConfig((prev) => ({
                             ...prev,
-                            regId: { ...prev.regId, y: Number(e.target.value) },
+                            textPosition: { ...prev.textPosition, y: Number(e.target.value) },
                           }))
                         }
                         className="w-full accent-[var(--primary-green)]"
@@ -347,18 +338,34 @@ export default function CertificateGenerator() {
                     <Type className="w-4 h-4" />
                     Font Settings
                   </p>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Font Size: {textConfig.fontSize}px</label>
+                      <label className="text-xs text-gray-500 mb-1 block">Name Size: {textConfig.nameFontSize}px</label>
                       <input
                         type="range"
-                        min="12"
+                        min="16"
                         max="72"
-                        value={textConfig.fontSize}
+                        value={textConfig.nameFontSize}
                         onChange={(e) =>
                           setTextConfig((prev) => ({
                             ...prev,
-                            fontSize: Number(e.target.value),
+                            nameFontSize: Number(e.target.value),
+                          }))
+                        }
+                        className="w-full accent-[var(--primary-green)]"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-500 mb-1 block">Text Size: {textConfig.textFontSize}px</label>
+                      <input
+                        type="range"
+                        min="12"
+                        max="36"
+                        value={textConfig.textFontSize}
+                        onChange={(e) =>
+                          setTextConfig((prev) => ({
+                            ...prev,
+                            textFontSize: Number(e.target.value),
                           }))
                         }
                         className="w-full accent-[var(--primary-green)]"
@@ -390,11 +397,11 @@ export default function CertificateGenerator() {
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition"
               >
                 <RotateCcw className="w-5 h-5" />
-                Reset All
+                Reset
               </button>
               <button
                 onClick={downloadCertificate}
-                disabled={!templateImage || !registrationName || !registrationId || isGenerating}
+                disabled={!participantName.trim() || isGenerating}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-[var(--primary-orange)] to-[var(--primary-green)] text-white font-semibold shadow-lg hover:shadow-xl transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg"
               >
                 <Download className="w-5 h-5" />
@@ -408,33 +415,23 @@ export default function CertificateGenerator() {
             <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl border border-gray-100 sticky top-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <ImageIcon className="w-5 h-5 text-[var(--primary-green)]" />
-                Live Preview
+                Live Preview - {currentTemplate.title}
               </h2>
 
               <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden shadow-inner">
-                {templateImage ? (
-                  <canvas
-                    ref={canvasRef}
-                    className="w-full h-full object-contain"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                    <ImageIcon className="w-16 h-16 mb-4 opacity-50" />
-                    <p className="text-lg font-medium">No template uploaded</p>
-                    <p className="text-sm">Upload a certificate template to see preview</p>
-                  </div>
-                )}
+                <canvas
+                  ref={canvasRef}
+                  className="w-full h-full object-contain"
+                />
               </div>
 
-              {templateImage && (
-                <div className="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
-                  <h3 className="font-semibold text-emerald-800 mb-2">Preview Info</h3>
-                  <div className="text-sm text-emerald-700 space-y-1">
-                    <p><span className="font-medium">Name:</span> {registrationName || "(Not entered)"}</p>
-                    <p><span className="font-medium">Registration ID:</span> {registrationId || "(Not entered)"}</p>
-                  </div>
+              <div className="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                <h3 className="font-semibold text-emerald-800 mb-2">Certificate Info</h3>
+                <div className="text-sm text-emerald-700 space-y-1">
+                  <p><span className="font-medium">Type:</span> {currentTemplate.title}</p>
+                  <p><span className="font-medium">Name:</span> {participantName.trim() || "(Enter name above)"}</p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
