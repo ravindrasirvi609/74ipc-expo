@@ -148,7 +148,7 @@ export default function CertificateGenerator() {
         const nameEndIndex = nameStartIndex + nameWords.length;
 
         // Measure and wrap text
-        let lines: { text: string; isBold: boolean }[][] = [];
+        const lines: { text: string; isBold: boolean }[][] = [];
         let currentLine: { text: string; isBold: boolean }[] = [];
         let currentLineWidth = 0;
 
@@ -173,7 +173,7 @@ export default function CertificateGenerator() {
 
         // Draw each line
         const totalHeight = lines.length * lineHeight;
-        let startY = textY - totalHeight / 2 + lineHeight / 2;
+        const startY = textY - totalHeight / 2 + lineHeight / 2;
 
         lines.forEach((line, lineIndex) => {
           // Calculate line width to center it
@@ -280,8 +280,8 @@ export default function CertificateGenerator() {
                 <button
                   onClick={() => handleCertificateTypeChange("delegate")}
                   className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${certificateType === "delegate"
-                      ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
-                      : "border-gray-200 hover:border-gray-300"
+                    ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
+                    : "border-gray-200 hover:border-gray-300"
                     }`}
                 >
                   <FileText className={`w-8 h-8 ${certificateType === "delegate" ? "text-[var(--primary-green)]" : "text-gray-400"}`} />
@@ -294,8 +294,8 @@ export default function CertificateGenerator() {
                 <button
                   onClick={() => handleCertificateTypeChange("poster")}
                   className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${certificateType === "poster"
-                      ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
-                      : "border-gray-200 hover:border-gray-300"
+                    ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
+                    : "border-gray-200 hover:border-gray-300"
                     }`}
                 >
                   <ImageIcon className={`w-8 h-8 ${certificateType === "poster" ? "text-[var(--primary-green)]" : "text-gray-400"}`} />
