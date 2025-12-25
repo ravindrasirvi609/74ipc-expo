@@ -11,6 +11,14 @@ interface Attendee {
   "ATTENDEE NAME": string;
 }
 
+interface PosterEntry {
+  "Sr. No.": number;
+  "Name of Presenting Author": string;
+  "Title": string;
+  "Poster Code": string;
+  "Date": string;
+}
+
 interface TextPosition {
   x: number;
   y: number;
@@ -22,10 +30,17 @@ interface TextConfig {
   fontColor: string;
 }
 
-// Fixed text config - no UI to change these
-const TEXT_CONFIG: TextConfig = {
+// Fixed text config for delegate certificates
+const DELEGATE_TEXT_CONFIG: TextConfig = {
   textPosition: { x: 55, y: 52 },
   textFontSize: 48,
+  fontColor: "#1a365d",
+};
+
+// Fixed text config for poster certificates
+const POSTER_TEXT_CONFIG: TextConfig = {
+  textPosition: { x: 51, y: 58 },
+  textFontSize: 39,
   fontColor: "#1a365d",
 };
 
@@ -40,7 +55,8 @@ const CERTIFICATE_TEMPLATES = {
     templateUrl: "/74th IPC Poster Presentation Certificate.png",
     title: "Poster Presentation Certificate",
     textBefore: "This is to certify that ",
-    textAfter: " has successfully delivered a poster presentation in the 74th Indian Pharmaceutical Congress held at Bengaluru International Exhibition Centre, Bengaluru during December 19-21, 2025",
+    textMiddle: " has successfully delivered a poster presentation entitled ",
+    textAfter: " in the 74th Indian Pharmaceutical Congress held at Bengaluru International Exhibition Centre, Bengaluru during December 19-21, 2025",
   },
 };
 
@@ -48,65 +64,95 @@ export default function CertificateGenerator() {
   const [certificateType, setCertificateType] = useState<CertificateType>("delegate");
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [participantName, setParticipantName] = useState("");
+  const [posterTitle, setPosterTitle] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [attendees, setAttendees] = useState<Attendee[]>([]);
-  const [loadingAttendees, setLoadingAttendees] = useState(false);
+  const [posters, setPosters] = useState<PosterEntry[]>([]);
+  const [loadingData, setLoadingData] = useState(false);
   const [lookupStatus, setLookupStatus] = useState<"idle" | "found" | "not-found">("idle");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const currentTemplate = CERTIFICATE_TEMPLATES[certificateType];
+  const textConfig = certificateType === "delegate" ? DELEGATE_TEXT_CONFIG : POSTER_TEXT_CONFIG;
 
-  // Load attendees JSON
+  // Load data based on certificate type
   useEffect(() => {
-    const loadAttendees = async () => {
-      setLoadingAttendees(true);
+    const loadData = async () => {
+      setLoadingData(true);
       try {
-        const response = await fetch("/attendees-all.json");
-        if (response.ok) {
-          const data = await response.json();
-          setAttendees(data);
+        if (certificateType === "delegate") {
+          const response = await fetch("/attendees-all.json");
+          if (response.ok) {
+            const data = await response.json();
+            setAttendees(data);
+          }
+        } else {
+          const response = await fetch("/final.json");
+          if (response.ok) {
+            const data = await response.json();
+            setPosters(data);
+          }
         }
       } catch (error) {
-        console.error("Failed to load attendees:", error);
+        console.error("Failed to load data:", error);
       }
-      setLoadingAttendees(false);
+      setLoadingData(false);
     };
-    loadAttendees();
-  }, []);
+    loadData();
+  }, [certificateType]);
 
-  // Look up attendee by registration number
-  const lookupAttendee = useCallback(() => {
-    if (!registrationNumber.trim() || attendees.length === 0) {
+  // Look up by registration/poster code
+  const lookupEntry = useCallback(() => {
+    if (!registrationNumber.trim()) {
       setLookupStatus("idle");
       setParticipantName("");
+      setPosterTitle("");
       return;
     }
 
     const searchTerm = registrationNumber.trim().toUpperCase();
-    const attendee = attendees.find(
-      (a) => a["REG NUM."].toUpperCase() === searchTerm
-    );
 
-    if (attendee) {
-      setParticipantName(attendee["ATTENDEE NAME"].trim());
-      setLookupStatus("found");
+    if (certificateType === "delegate") {
+      if (attendees.length === 0) return;
+      const attendee = attendees.find(
+        (a) => a["REG NUM."].toUpperCase() === searchTerm
+      );
+      if (attendee) {
+        setParticipantName(attendee["ATTENDEE NAME"].trim());
+        setLookupStatus("found");
+      } else {
+        setParticipantName("");
+        setLookupStatus("not-found");
+      }
     } else {
-      setParticipantName("");
-      setLookupStatus("not-found");
+      if (posters.length === 0) return;
+      const poster = posters.find(
+        (p) => p["Poster Code"].toUpperCase() === searchTerm
+      );
+      if (poster) {
+        setParticipantName(poster["Name of Presenting Author"].trim());
+        setPosterTitle(poster["Title"].trim());
+        setLookupStatus("found");
+      } else {
+        setParticipantName("");
+        setPosterTitle("");
+        setLookupStatus("not-found");
+      }
     }
-  }, [registrationNumber, attendees]);
+  }, [registrationNumber, certificateType, attendees, posters]);
 
   // Auto-lookup when registration number changes
   useEffect(() => {
     if (registrationNumber.trim()) {
-      const debounce = setTimeout(lookupAttendee, 300);
+      const debounce = setTimeout(lookupEntry, 300);
       return () => clearTimeout(debounce);
     } else {
       setParticipantName("");
+      setPosterTitle("");
       setLookupStatus("idle");
     }
-  }, [registrationNumber, lookupAttendee]);
+  }, [registrationNumber, lookupEntry]);
 
   // Generate certificate on canvas
   const generateCertificate = useCallback(() => {
@@ -128,36 +174,47 @@ export default function CertificateGenerator() {
 
       // Only draw text if participant name is provided
       if (participantName.trim()) {
-        const centerX = (TEXT_CONFIG.textPosition.x / 100) * canvas.width;
-        const textY = (TEXT_CONFIG.textPosition.y / 100) * canvas.height;
+        const centerX = (textConfig.textPosition.x / 100) * canvas.width;
+        const textY = (textConfig.textPosition.y / 100) * canvas.height;
 
-        // Text wrapping with bold name
+        // Text wrapping with bold name and title
         const maxWidth = canvas.width * 0.75;
-        const lineHeight = TEXT_CONFIG.textFontSize * 1.6;
+        const lineHeight = textConfig.textFontSize * 1.6;
 
-        // Calculate lines for the full text
-        const beforeText = currentTemplate.textBefore;
-        const afterText = currentTemplate.textAfter;
+        let allWords: { text: string; isBold: boolean }[] = [];
 
-        // Split into words and track which words are the name
-        const beforeWords = beforeText.split(" ").filter(w => w);
-        const nameWords = participantName.trim().split(" ").filter(w => w);
-        const afterWords = afterText.split(" ").filter(w => w);
-        const allWords = [...beforeWords, ...nameWords, ...afterWords];
+        if (certificateType === "delegate") {
+          const beforeWords = CERTIFICATE_TEMPLATES.delegate.textBefore.split(" ").filter(w => w);
+          const nameWords = participantName.trim().split(" ").filter(w => w);
+          const afterWords = CERTIFICATE_TEMPLATES.delegate.textAfter.split(" ").filter(w => w);
 
-        // Track where name starts and ends
-        const nameStartIndex = beforeWords.length;
-        const nameEndIndex = nameStartIndex + nameWords.length;
+          beforeWords.forEach(w => allWords.push({ text: w, isBold: false }));
+          nameWords.forEach(w => allWords.push({ text: w, isBold: true }));
+          afterWords.forEach(w => allWords.push({ text: w, isBold: false }));
+        } else {
+          // Poster certificate with name and title
+          const template = CERTIFICATE_TEMPLATES.poster;
+          const beforeWords = template.textBefore.split(" ").filter(w => w);
+          const nameWords = participantName.trim().split(" ").filter(w => w);
+          const middleWords = template.textMiddle.split(" ").filter(w => w);
+          const titleWords = posterTitle.trim().split(" ").filter(w => w);
+          const afterWords = template.textAfter.split(" ").filter(w => w);
+
+          beforeWords.forEach(w => allWords.push({ text: w, isBold: false }));
+          nameWords.forEach(w => allWords.push({ text: w, isBold: true }));
+          middleWords.forEach(w => allWords.push({ text: w, isBold: false }));
+          titleWords.forEach(w => allWords.push({ text: w, isBold: true }));
+          afterWords.forEach(w => allWords.push({ text: w, isBold: false }));
+        }
 
         // Measure and wrap text
         const lines: { text: string; isBold: boolean }[][] = [];
         let currentLine: { text: string; isBold: boolean }[] = [];
         let currentLineWidth = 0;
 
-        allWords.forEach((word, index) => {
-          const isBold = index >= nameStartIndex && index < nameEndIndex;
-          ctx.font = `${isBold ? "bold " : ""}${TEXT_CONFIG.textFontSize}px "Times New Roman", Georgia, serif`;
-          const wordWidth = ctx.measureText(word + " ").width;
+        allWords.forEach((wordObj) => {
+          ctx.font = `${wordObj.isBold ? "bold " : ""}${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
+          const wordWidth = ctx.measureText(wordObj.text + " ").width;
 
           if (currentLineWidth + wordWidth > maxWidth && currentLine.length > 0) {
             lines.push(currentLine);
@@ -165,7 +222,7 @@ export default function CertificateGenerator() {
             currentLineWidth = 0;
           }
 
-          currentLine.push({ text: word, isBold });
+          currentLine.push(wordObj);
           currentLineWidth += wordWidth;
         });
 
@@ -181,7 +238,7 @@ export default function CertificateGenerator() {
           // Calculate line width to center it
           let lineWidth = 0;
           line.forEach((segment) => {
-            ctx.font = `${segment.isBold ? "bold " : ""}${TEXT_CONFIG.textFontSize}px "Times New Roman", Georgia, serif`;
+            ctx.font = `${segment.isBold ? "bold " : ""}${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
             lineWidth += ctx.measureText(segment.text + " ").width;
           });
 
@@ -191,8 +248,8 @@ export default function CertificateGenerator() {
 
           // Draw each word segment
           line.forEach((segment) => {
-            ctx.font = `${segment.isBold ? "bold " : ""}${TEXT_CONFIG.textFontSize}px "Times New Roman", Georgia, serif`;
-            ctx.fillStyle = TEXT_CONFIG.fontColor;
+            ctx.font = `${segment.isBold ? "bold " : ""}${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
+            ctx.fillStyle = textConfig.fontColor;
             ctx.textBaseline = "middle";
             ctx.fillText(segment.text + " ", x, y);
             x += ctx.measureText(segment.text + " ").width;
@@ -204,7 +261,7 @@ export default function CertificateGenerator() {
       console.error("Failed to load template image");
     };
     img.src = currentTemplate.templateUrl;
-  }, [certificateType, participantName, currentTemplate]);
+  }, [certificateType, participantName, posterTitle, textConfig, currentTemplate]);
 
   // Update canvas whenever inputs change
   useEffect(() => {
@@ -224,8 +281,8 @@ export default function CertificateGenerator() {
     try {
       const link = document.createElement("a");
       const safeName = participantName.trim().replace(/[^a-zA-Z0-9]/g, "_");
-      const safeRegNum = registrationNumber.trim().replace(/[^a-zA-Z0-9-]/g, "_");
-      link.download = `certificate-${certificateType}-${safeRegNum || safeName}.png`;
+      const safeCode = registrationNumber.trim().replace(/[^a-zA-Z0-9-]/g, "_");
+      link.download = `certificate-${certificateType}-${safeCode || safeName}.png`;
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
     } catch (error) {
@@ -240,6 +297,7 @@ export default function CertificateGenerator() {
   const resetAll = () => {
     setRegistrationNumber("");
     setParticipantName("");
+    setPosterTitle("");
     setLookupStatus("idle");
   };
 
@@ -248,11 +306,16 @@ export default function CertificateGenerator() {
     setCertificateType(type);
     setRegistrationNumber("");
     setParticipantName("");
+    setPosterTitle("");
     setLookupStatus("idle");
   };
 
   const baseInputClasses =
     "w-full rounded-xl border px-4 py-2.5 text-gray-900 shadow-sm transition focus:outline-none focus:ring-2 border-gray-200 focus:border-[var(--primary-green)] focus:ring-[var(--primary-green)]/30";
+
+  const dataCount = certificateType === "delegate" ? attendees.length : posters.length;
+  const codeLabel = certificateType === "delegate" ? "Registration Number" : "Poster Code";
+  const codePlaceholder = certificateType === "delegate" ? "e.g., IPC-TM-1001" : "e.g., PC-01";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-orange-50 py-12 px-4">
@@ -263,7 +326,7 @@ export default function CertificateGenerator() {
             Certificate Generator
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Generate personalized certificates for 74th IPC participants. Enter your registration number to generate certificate.
+            Generate personalized certificates for 74th IPC participants. Enter your {codeLabel.toLowerCase()} to generate certificate.
           </p>
         </div>
 
@@ -316,11 +379,11 @@ export default function CertificateGenerator() {
               </h2>
 
               <div className="space-y-4">
-                {/* Registration Number */}
+                {/* Registration/Poster Code */}
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <Search className="w-4 h-4" />
-                    Registration Number <span className="text-red-500">*</span>
+                    {codeLabel} <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -331,7 +394,7 @@ export default function CertificateGenerator() {
                         setLookupStatus("idle");
                       }}
                       className={baseInputClasses}
-                      placeholder="e.g., IPC-TM-1001"
+                      placeholder={codePlaceholder}
                     />
                     {lookupStatus !== "idle" && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -344,18 +407,18 @@ export default function CertificateGenerator() {
                     )}
                   </div>
                   <p className="text-xs text-gray-500">
-                    {loadingAttendees
-                      ? "Loading attendees database..."
+                    {loadingData
+                      ? "Loading database..."
                       : lookupStatus === "found"
-                        ? "✓ Name auto-filled from registration records"
+                        ? "✓ Details auto-filled from records"
                         : lookupStatus === "not-found"
-                          ? "Registration number not found. Please check and try again."
-                          : `Enter registration number to generate certificate (${attendees.length} attendees loaded)`
+                          ? `${codeLabel} not found. Please check and try again.`
+                          : `Enter ${codeLabel.toLowerCase()} to generate certificate (${dataCount} entries loaded)`
                     }
                   </p>
                 </div>
 
-                {/* Participant Name (Read-only, auto-generated) */}
+                {/* Participant Name (Read-only) */}
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <User className="w-4 h-4" />
@@ -367,22 +430,53 @@ export default function CertificateGenerator() {
                     readOnly
                     disabled
                     className={`${baseInputClasses} bg-gray-100 cursor-not-allowed ${lookupStatus === "found" ? "bg-emerald-50 text-emerald-800 font-medium" : ""}`}
-                    placeholder="Auto-generated from registration number"
+                    placeholder="Auto-generated from code"
                   />
                 </div>
+
+                {/* Poster Title (only for poster certificates) */}
+                {certificateType === "poster" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                      <FileText className="w-4 h-4" />
+                      Presentation Title
+                    </label>
+                    <textarea
+                      value={posterTitle}
+                      readOnly
+                      disabled
+                      rows={3}
+                      className={`${baseInputClasses} bg-gray-100 cursor-not-allowed resize-none ${lookupStatus === "found" ? "bg-emerald-50 text-emerald-800 font-medium" : ""}`}
+                      placeholder="Auto-generated from poster code"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Preview of certificate text */}
               {participantName.trim() && (
                 <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
                   <p className="text-sm text-gray-700">
-                    {currentTemplate.textBefore}
-                    <span className="font-bold text-[var(--primary-green)]">{participantName.trim()}</span>
-                    {currentTemplate.textAfter}
+                    {certificateType === "delegate" ? (
+                      <>
+                        {CERTIFICATE_TEMPLATES.delegate.textBefore}
+                        <span className="font-bold text-[var(--primary-green)]">{participantName.trim()}</span>
+                        {CERTIFICATE_TEMPLATES.delegate.textAfter}
+                      </>
+                    ) : (
+                      <>
+                        {CERTIFICATE_TEMPLATES.poster.textBefore}
+                        <span className="font-bold text-[var(--primary-green)]">{participantName.trim()}</span>
+                        {CERTIFICATE_TEMPLATES.poster.textMiddle}
+                        <span className="font-bold text-[var(--primary-orange)]">{posterTitle.trim()}</span>
+                        {CERTIFICATE_TEMPLATES.poster.textAfter}
+                      </>
+                    )}
                   </p>
                 </div>
               )}
             </div>
+
 
             {/* Action Buttons */}
             <div className="flex gap-4">
@@ -404,7 +498,7 @@ export default function CertificateGenerator() {
             </div>
           </div>
 
-          {/* Right Column - Preview (only show when valid registration found) */}
+          {/* Right Column - Preview (only show when valid code found) */}
           {lookupStatus === "found" && (
             <div className="animate-slide-up" style={{ animationDelay: "0.1s" }}>
               <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl border border-gray-100 sticky top-6">
@@ -424,8 +518,11 @@ export default function CertificateGenerator() {
                   <h3 className="font-semibold text-emerald-800 mb-2">Certificate Info</h3>
                   <div className="text-sm text-emerald-700 space-y-1">
                     <p><span className="font-medium">Type:</span> {currentTemplate.title}</p>
-                    <p><span className="font-medium">Reg. No:</span> {registrationNumber}</p>
+                    <p><span className="font-medium">{codeLabel}:</span> {registrationNumber}</p>
                     <p><span className="font-medium">Name:</span> {participantName.trim()}</p>
+                    {certificateType === "poster" && posterTitle && (
+                      <p><span className="font-medium">Title:</span> {posterTitle.length > 50 ? posterTitle.substring(0, 50) + "..." : posterTitle}</p>
+                    )}
                   </div>
                 </div>
               </div>
