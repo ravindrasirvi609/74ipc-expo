@@ -1,9 +1,15 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Download, Image as ImageIcon, User, Move, Type, RotateCcw, Award, FileText } from "lucide-react";
+import { Download, Image as ImageIcon, User, Move, Type, RotateCcw, Award, FileText, Search, CheckCircle, AlertCircle } from "lucide-react";
 
 type CertificateType = "delegate" | "poster";
+
+interface Attendee {
+  "SR NO.": number;
+  "REG NUM.": string;
+  "ATTENDEE NAME": string;
+}
 
 interface TextPosition {
   x: number;
@@ -11,7 +17,6 @@ interface TextPosition {
 }
 
 interface TextConfig {
-  namePosition: TextPosition;
   textPosition: TextPosition;
   nameFontSize: number;
   textFontSize: number;
@@ -19,11 +24,10 @@ interface TextConfig {
 }
 
 const DEFAULT_TEXT_CONFIG: TextConfig = {
-  namePosition: { x: 50, y: 50 },
-  textPosition: { x: 50, y: 58 },
-  nameFontSize: 36,
-  textFontSize: 20,
-  fontColor: "#1a1a1a",
+  textPosition: { x: 50, y: 50 },
+  nameFontSize: 42,
+  textFontSize: 24,
+  fontColor: "#1a365d",
 };
 
 const CERTIFICATE_TEMPLATES = {
@@ -43,14 +47,63 @@ const CERTIFICATE_TEMPLATES = {
 
 export default function CertificateGenerator() {
   const [certificateType, setCertificateType] = useState<CertificateType>("delegate");
+  const [registrationNumber, setRegistrationNumber] = useState("");
   const [participantName, setParticipantName] = useState("");
   const [textConfig, setTextConfig] = useState<TextConfig>(DEFAULT_TEXT_CONFIG);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [templateLoaded, setTemplateLoaded] = useState(false);
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
+  const [loadingAttendees, setLoadingAttendees] = useState(false);
+  const [lookupStatus, setLookupStatus] = useState<"idle" | "found" | "not-found">("idle");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const currentTemplate = CERTIFICATE_TEMPLATES[certificateType];
+
+  // Load attendees JSON
+  useEffect(() => {
+    const loadAttendees = async () => {
+      setLoadingAttendees(true);
+      try {
+        const response = await fetch("/attendees-all.json");
+        if (response.ok) {
+          const data = await response.json();
+          setAttendees(data);
+        }
+      } catch (error) {
+        console.error("Failed to load attendees:", error);
+      }
+      setLoadingAttendees(false);
+    };
+    loadAttendees();
+  }, []);
+
+  // Look up attendee by registration number
+  const lookupAttendee = useCallback(() => {
+    if (!registrationNumber.trim() || attendees.length === 0) {
+      setLookupStatus("idle");
+      return;
+    }
+
+    const searchTerm = registrationNumber.trim().toUpperCase();
+    const attendee = attendees.find(
+      (a) => a["REG NUM."].toUpperCase() === searchTerm
+    );
+
+    if (attendee) {
+      setParticipantName(attendee["ATTENDEE NAME"].trim());
+      setLookupStatus("found");
+    } else {
+      setLookupStatus("not-found");
+    }
+  }, [registrationNumber, attendees]);
+
+  // Auto-lookup when registration number changes (for delegate certificates)
+  useEffect(() => {
+    if (certificateType === "delegate" && registrationNumber.trim()) {
+      const debounce = setTimeout(lookupAttendee, 300);
+      return () => clearTimeout(debounce);
+    }
+  }, [certificateType, registrationNumber, lookupAttendee]);
 
   // Generate certificate on canvas
   const generateCertificate = useCallback(() => {
@@ -72,48 +125,81 @@ export default function CertificateGenerator() {
 
       // Only draw text if participant name is provided
       if (participantName.trim()) {
-        const centerX = (textConfig.namePosition.x / 100) * canvas.width;
-        const nameY = (textConfig.namePosition.y / 100) * canvas.height;
+        const centerX = (textConfig.textPosition.x / 100) * canvas.width;
         const textY = (textConfig.textPosition.y / 100) * canvas.height;
 
-        // Draw participant name (bold, larger)
-        ctx.font = `bold ${textConfig.nameFontSize}px "Times New Roman", Georgia, serif`;
-        ctx.fillStyle = textConfig.fontColor;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(participantName.trim(), centerX, nameY);
-
-        // Draw certificate text (wrapped)
-        const fullText = currentTemplate.textBefore + participantName.trim() + currentTemplate.textAfter;
-        ctx.font = `${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
-
-        // Text wrapping
+        // Text wrapping with bold name
         const maxWidth = canvas.width * 0.75;
-        const words = fullText.split(" ");
-        let line = "";
-        let lineY = textY;
-        const lineHeight = textConfig.textFontSize * 1.5;
+        const lineHeight = textConfig.textFontSize * 1.6;
 
-        for (let i = 0; i < words.length; i++) {
-          const testLine = line + words[i] + " ";
-          const metrics = ctx.measureText(testLine);
+        // Calculate lines for the full text
+        const beforeText = currentTemplate.textBefore;
+        const afterText = currentTemplate.textAfter;
+        const fullText = beforeText + participantName.trim() + afterText;
 
-          if (metrics.width > maxWidth && i > 0) {
-            ctx.fillText(line.trim(), centerX, lineY);
-            line = words[i] + " ";
-            lineY += lineHeight;
-          } else {
-            line = testLine;
+        // Split into words and track which words are the name
+        const beforeWords = beforeText.split(" ").filter(w => w);
+        const nameWords = participantName.trim().split(" ").filter(w => w);
+        const afterWords = afterText.split(" ").filter(w => w);
+        const allWords = [...beforeWords, ...nameWords, ...afterWords];
+
+        // Track where name starts and ends
+        const nameStartIndex = beforeWords.length;
+        const nameEndIndex = nameStartIndex + nameWords.length;
+
+        // Measure and wrap text
+        let lines: { text: string; isBold: boolean }[][] = [];
+        let currentLine: { text: string; isBold: boolean }[] = [];
+        let currentLineWidth = 0;
+
+        allWords.forEach((word, index) => {
+          const isBold = index >= nameStartIndex && index < nameEndIndex;
+          ctx.font = `${isBold ? "bold " : ""}${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
+          const wordWidth = ctx.measureText(word + " ").width;
+
+          if (currentLineWidth + wordWidth > maxWidth && currentLine.length > 0) {
+            lines.push(currentLine);
+            currentLine = [];
+            currentLineWidth = 0;
           }
-        }
-        ctx.fillText(line.trim(), centerX, lineY);
-      }
 
-      setTemplateLoaded(true);
+          currentLine.push({ text: word, isBold });
+          currentLineWidth += wordWidth;
+        });
+
+        if (currentLine.length > 0) {
+          lines.push(currentLine);
+        }
+
+        // Draw each line
+        const totalHeight = lines.length * lineHeight;
+        let startY = textY - totalHeight / 2 + lineHeight / 2;
+
+        lines.forEach((line, lineIndex) => {
+          // Calculate line width to center it
+          let lineWidth = 0;
+          line.forEach((segment) => {
+            ctx.font = `${segment.isBold ? "bold " : ""}${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
+            lineWidth += ctx.measureText(segment.text + " ").width;
+          });
+
+          // Start position for centered text
+          let x = centerX - lineWidth / 2;
+          const y = startY + lineIndex * lineHeight;
+
+          // Draw each word segment
+          line.forEach((segment) => {
+            ctx.font = `${segment.isBold ? "bold " : ""}${textConfig.textFontSize}px "Times New Roman", Georgia, serif`;
+            ctx.fillStyle = textConfig.fontColor;
+            ctx.textBaseline = "middle";
+            ctx.fillText(segment.text + " ", x, y);
+            x += ctx.measureText(segment.text + " ").width;
+          });
+        });
+      }
     };
     img.onerror = () => {
       console.error("Failed to load template image");
-      setTemplateLoaded(false);
     };
     img.src = currentTemplate.templateUrl;
   }, [certificateType, participantName, textConfig, currentTemplate]);
@@ -136,7 +222,8 @@ export default function CertificateGenerator() {
     try {
       const link = document.createElement("a");
       const safeName = participantName.trim().replace(/[^a-zA-Z0-9]/g, "_");
-      link.download = `certificate-${certificateType}-${safeName}.png`;
+      const safeRegNum = registrationNumber.trim().replace(/[^a-zA-Z0-9-]/g, "_");
+      link.download = `certificate-${certificateType}-${safeRegNum || safeName}.png`;
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
     } catch (error) {
@@ -149,8 +236,18 @@ export default function CertificateGenerator() {
 
   // Reset all
   const resetAll = () => {
+    setRegistrationNumber("");
     setParticipantName("");
     setTextConfig(DEFAULT_TEXT_CONFIG);
+    setLookupStatus("idle");
+  };
+
+  // Handle certificate type change
+  const handleCertificateTypeChange = (type: CertificateType) => {
+    setCertificateType(type);
+    setRegistrationNumber("");
+    setParticipantName("");
+    setLookupStatus("idle");
   };
 
   const baseInputClasses =
@@ -165,7 +262,7 @@ export default function CertificateGenerator() {
             Certificate Generator
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Generate personalized certificates for 74th IPC participants. Select certificate type, enter the name, and download instantly.
+            Generate personalized certificates for 74th IPC participants. Enter registration number to auto-fill name.
           </p>
         </div>
 
@@ -181,7 +278,7 @@ export default function CertificateGenerator() {
 
               <div className="grid grid-cols-2 gap-4">
                 <button
-                  onClick={() => setCertificateType("delegate")}
+                  onClick={() => handleCertificateTypeChange("delegate")}
                   className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${certificateType === "delegate"
                       ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
                       : "border-gray-200 hover:border-gray-300"
@@ -195,7 +292,7 @@ export default function CertificateGenerator() {
                 </button>
 
                 <button
-                  onClick={() => setCertificateType("poster")}
+                  onClick={() => handleCertificateTypeChange("poster")}
                   className={`p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${certificateType === "poster"
                       ? "border-[var(--primary-green)] bg-[var(--primary-green)]/5 shadow-lg"
                       : "border-gray-200 hover:border-gray-300"
@@ -210,34 +307,76 @@ export default function CertificateGenerator() {
               </div>
             </div>
 
-            {/* Participant Name */}
+            {/* Participant Details */}
             <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-xl border border-gray-100">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <User className="w-5 h-5 text-[var(--primary-green)]" />
                 Participant Details
               </h2>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  Participant Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={participantName}
-                  onChange={(e) => setParticipantName(e.target.value)}
-                  className={baseInputClasses}
-                  placeholder="Enter participant's full name"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  This name will appear on the certificate
-                </p>
+              <div className="space-y-4">
+                {/* Registration Number */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <Search className="w-4 h-4" />
+                    Registration Number <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={registrationNumber}
+                      onChange={(e) => {
+                        setRegistrationNumber(e.target.value.toUpperCase());
+                        setLookupStatus("idle");
+                      }}
+                      className={baseInputClasses}
+                      placeholder="e.g., IPC-TM-1001"
+                    />
+                    {certificateType === "delegate" && lookupStatus !== "idle" && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        {lookupStatus === "found" ? (
+                          <CheckCircle className="w-5 h-5 text-emerald-500" />
+                        ) : (
+                          <AlertCircle className="w-5 h-5 text-red-500" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {certificateType === "delegate" && (
+                    <p className="text-xs text-gray-500">
+                      {loadingAttendees
+                        ? "Loading attendees database..."
+                        : lookupStatus === "found"
+                          ? "✓ Name auto-filled from registration records"
+                          : lookupStatus === "not-found"
+                            ? "Registration number not found. Please check and try again."
+                            : `Enter registration number to auto-fill name (${attendees.length} attendees loaded)`
+                      }
+                    </p>
+                  )}
+                </div>
+
+                {/* Participant Name */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <User className="w-4 h-4" />
+                    Participant Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={participantName}
+                    onChange={(e) => setParticipantName(e.target.value)}
+                    className={`${baseInputClasses} ${certificateType === "delegate" && lookupStatus === "found" ? "bg-emerald-50" : ""}`}
+                    placeholder={certificateType === "delegate" ? "Auto-filled from registration" : "Enter participant's full name"}
+                    readOnly={certificateType === "delegate" && lookupStatus === "found"}
+                  />
+                </div>
               </div>
 
               {/* Preview of certificate text */}
               {participantName.trim() && (
                 <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                  <p className="text-sm text-gray-700 italic">
+                  <p className="text-sm text-gray-700">
                     {currentTemplate.textBefore}
                     <span className="font-bold text-[var(--primary-green)]">{participantName.trim()}</span>
                     {currentTemplate.textAfter}
@@ -254,45 +393,6 @@ export default function CertificateGenerator() {
               </h2>
 
               <div className="space-y-6">
-                {/* Name Position */}
-                <div className="space-y-3">
-                  <p className="text-sm font-semibold text-gray-700">Name Position</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Horizontal: {textConfig.namePosition.x}%</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={textConfig.namePosition.x}
-                        onChange={(e) =>
-                          setTextConfig((prev) => ({
-                            ...prev,
-                            namePosition: { ...prev.namePosition, x: Number(e.target.value) },
-                          }))
-                        }
-                        className="w-full accent-[var(--primary-green)]"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Vertical: {textConfig.namePosition.y}%</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={textConfig.namePosition.y}
-                        onChange={(e) =>
-                          setTextConfig((prev) => ({
-                            ...prev,
-                            namePosition: { ...prev.namePosition, y: Number(e.target.value) },
-                          }))
-                        }
-                        className="w-full accent-[var(--primary-green)]"
-                      />
-                    </div>
-                  </div>
-                </div>
-
                 {/* Text Position */}
                 <div className="space-y-3">
                   <p className="text-sm font-semibold text-gray-700">Certificate Text Position</p>
@@ -338,29 +438,13 @@ export default function CertificateGenerator() {
                     <Type className="w-4 h-4" />
                     Font Settings
                   </p>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Name Size: {textConfig.nameFontSize}px</label>
-                      <input
-                        type="range"
-                        min="16"
-                        max="72"
-                        value={textConfig.nameFontSize}
-                        onChange={(e) =>
-                          setTextConfig((prev) => ({
-                            ...prev,
-                            nameFontSize: Number(e.target.value),
-                          }))
-                        }
-                        className="w-full accent-[var(--primary-green)]"
-                      />
-                    </div>
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs text-gray-500 mb-1 block">Text Size: {textConfig.textFontSize}px</label>
                       <input
                         type="range"
-                        min="12"
-                        max="36"
+                        min="16"
+                        max="48"
                         value={textConfig.textFontSize}
                         onChange={(e) =>
                           setTextConfig((prev) => ({
@@ -429,6 +513,7 @@ export default function CertificateGenerator() {
                 <h3 className="font-semibold text-emerald-800 mb-2">Certificate Info</h3>
                 <div className="text-sm text-emerald-700 space-y-1">
                   <p><span className="font-medium">Type:</span> {currentTemplate.title}</p>
+                  <p><span className="font-medium">Reg. No:</span> {registrationNumber || "(Enter above)"}</p>
                   <p><span className="font-medium">Name:</span> {participantName.trim() || "(Enter name above)"}</p>
                 </div>
               </div>
