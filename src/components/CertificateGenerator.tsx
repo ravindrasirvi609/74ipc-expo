@@ -116,7 +116,7 @@ export default function CertificateGenerator() {
     if (certificateType === "delegate") {
       if (attendees.length === 0) return;
       const attendee = attendees.find(
-        (a) => a["REG NUM."].toUpperCase() === searchTerm
+        (a) => a["REG NUM."] && String(a["REG NUM."]).toUpperCase() === searchTerm
       );
       if (attendee) {
         setParticipantName(attendee["ATTENDEE NAME"].trim());
