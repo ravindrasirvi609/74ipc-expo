@@ -181,7 +181,7 @@ export default function CertificateGenerator() {
         const maxWidth = canvas.width * 0.75;
         const lineHeight = textConfig.textFontSize * 1.6;
 
-        let allWords: { text: string; isBold: boolean }[] = [];
+        const allWords: { text: string; isBold: boolean }[] = [];
 
         if (certificateType === "delegate") {
           const beforeWords = CERTIFICATE_TEMPLATES.delegate.textBefore.split(" ").filter(w => w);
