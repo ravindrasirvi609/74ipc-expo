@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         );
 
         const { data, error } = await resend.emails.send({
-            from: "74th IPC <dev@ravindrachoudhary.in>",
+            from: "74th IPC <no-reply@ravindrachoudhary.in>",
             to: email,
             subject: "Your 74th IPC Delegate Certificate",
             html: `
