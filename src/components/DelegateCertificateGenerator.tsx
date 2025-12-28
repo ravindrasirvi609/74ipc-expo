@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Download, Image as ImageIcon, User, RotateCcw, Award, Search, CheckCircle, AlertCircle } from "lucide-react";
+import { Download, Image as ImageIcon, User, RotateCcw, Award, Search, CheckCircle, AlertCircle, Mail, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 interface Attendee {
     "SR NO.": number;
     "REG NUM.": string;
     "ATTENDEE NAME": string;
+    "ATTENDEE EMAIL": string;
 }
 
 interface TextPosition {
@@ -37,7 +38,10 @@ const DELEGATE_TEMPLATE = {
 export default function DelegateCertificateGenerator() {
     const [registrationNumber, setRegistrationNumber] = useState("");
     const [participantName, setParticipantName] = useState("");
+    const [participantEmail, setParticipantEmail] = useState("");
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
+    const [emailStatus, setEmailStatus] = useState<"idle" | "success" | "error">("idle");
     const [attendees, setAttendees] = useState<Attendee[]>([]);
     const [loadingData, setLoadingData] = useState(false);
     const [lookupStatus, setLookupStatus] = useState<"idle" | "found" | "not-found">("idle");
@@ -79,9 +83,11 @@ export default function DelegateCertificateGenerator() {
 
         if (attendee) {
             setParticipantName(attendee["ATTENDEE NAME"].trim());
+            setParticipantEmail(attendee["ATTENDEE EMAIL"]?.trim() || "");
             setLookupStatus("found");
         } else {
             setParticipantName("");
+            setParticipantEmail("");
             setLookupStatus("not-found");
         }
     }, [registrationNumber, attendees]);
@@ -93,6 +99,7 @@ export default function DelegateCertificateGenerator() {
             return () => clearTimeout(debounce);
         } else {
             setParticipantName("");
+            setParticipantEmail("");
             setLookupStatus("idle");
         }
     }, [registrationNumber, lookupEntry]);
@@ -187,6 +194,7 @@ export default function DelegateCertificateGenerator() {
         if (!canvas || !participantName.trim()) return;
 
         setIsGenerating(true);
+        setEmailStatus("idle");
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         try {
@@ -194,8 +202,37 @@ export default function DelegateCertificateGenerator() {
             const safeName = participantName.trim().replace(/[^a-zA-Z0-9]/g, "_");
             const safeCode = registrationNumber.trim().replace(/[^a-zA-Z0-9-]/g, "_");
             link.download = `certificate-delegate-${safeCode || safeName}.png`;
-            link.href = canvas.toDataURL("image/png", 1.0);
+            const certificateBase64 = canvas.toDataURL("image/png", 1.0);
+            link.href = certificateBase64;
             link.click();
+
+            // Send email if participant has an email
+            if (participantEmail) {
+                setIsSendingEmail(true);
+                try {
+                    const response = await fetch("/api/send-certificate", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            email: participantEmail,
+                            name: participantName.trim(),
+                            registrationNumber: registrationNumber.trim(),
+                            certificateBase64,
+                        }),
+                    });
+
+                    if (response.ok) {
+                        setEmailStatus("success");
+                    } else {
+                        console.error("Email send failed");
+                        setEmailStatus("error");
+                    }
+                } catch (emailError) {
+                    console.error("Email error:", emailError);
+                    setEmailStatus("error");
+                }
+                setIsSendingEmail(false);
+            }
         } catch (error) {
             console.error("Error downloading certificate:", error);
             alert("Failed to download certificate. Please try again.");
@@ -207,7 +244,9 @@ export default function DelegateCertificateGenerator() {
     const resetAll = () => {
         setRegistrationNumber("");
         setParticipantName("");
+        setParticipantEmail("");
         setLookupStatus("idle");
+        setEmailStatus("idle");
     };
 
     const baseInputClasses =
@@ -336,13 +375,39 @@ export default function DelegateCertificateGenerator() {
                             </button>
                             <button
                                 onClick={downloadCertificate}
-                                disabled={!participantName.trim() || isGenerating}
+                                disabled={!participantName.trim() || isGenerating || isSendingEmail}
                                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-[var(--primary-orange)] to-[var(--primary-green)] text-white font-semibold shadow-lg hover:shadow-xl transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg"
                             >
-                                <Download className="w-5 h-5" />
-                                {isGenerating ? "Generating..." : "Download Certificate"}
+                                {isSendingEmail ? (
+                                    <><Loader2 className="w-5 h-5 animate-spin" /> Sending Email...</>
+                                ) : isGenerating ? (
+                                    <><Loader2 className="w-5 h-5 animate-spin" /> Generating...</>
+                                ) : (
+                                    <><Download className="w-5 h-5" /> Download & Email Certificate</>
+                                )}
                             </button>
                         </div>
+
+                        {/* Email Status Notification */}
+                        {emailStatus !== "idle" && (
+                            <div className={`mt-4 p-4 rounded-xl flex items-center gap-3 ${emailStatus === "success" ? "bg-emerald-50 border border-emerald-200" : "bg-red-50 border border-red-200"}`}>
+                                {emailStatus === "success" ? (
+                                    <>
+                                        <Mail className="w-5 h-5 text-emerald-600" />
+                                        <p className="text-emerald-700 text-sm">
+                                            Certificate has been emailed to <strong>{participantEmail}</strong>
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <AlertCircle className="w-5 h-5 text-red-600" />
+                                        <p className="text-red-700 text-sm">
+                                            Failed to send email. Certificate downloaded successfully, please share manually.
+                                        </p>
+                                    </>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column - Preview */}
